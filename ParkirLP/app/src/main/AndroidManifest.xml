@@ -9,6 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkirLPKedungpane">
+        <activity android:name=".OutParkir" android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".AddParkir" android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
