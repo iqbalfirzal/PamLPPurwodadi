@@ -33,11 +33,11 @@ public class ListParkirAdapter extends FirestoreRecyclerAdapter<ParkirModel, Lis
     @SuppressLint("SetTextI18n")
     @Override
     protected void onBindViewHolder(@NonNull ListParkirHolder holder, int position, @NonNull ParkirModel model) {
+        holder.nomormasuk.setText(String.valueOf(position+1));
         holder.platnomor.setText("Plat Nomor : "+model.getPlatNomor());
         holder.jeniskendaraan.setText("Kendaraan     : "+model.getJenisKendaraan());
         holder.keperluan.setText("Keperluan      : "+model.getKeperluan());
         holder.masukjam.setText("Masuk jam     : "+formatJam(model.getMasukJam()));
-
     }
 
     @NonNull
@@ -49,7 +49,7 @@ public class ListParkirAdapter extends FirestoreRecyclerAdapter<ParkirModel, Lis
     }
 
     class ListParkirHolder extends RecyclerView.ViewHolder {
-        TextView platnomor,jeniskendaraan,keperluan,masukjam;
+        TextView platnomor,jeniskendaraan,keperluan,masukjam,nomormasuk;
         ImageButton kelparkir, delparkir;
 
         public ListParkirHolder(View itemView) {
@@ -58,6 +58,7 @@ public class ListParkirAdapter extends FirestoreRecyclerAdapter<ParkirModel, Lis
             jeniskendaraan = itemView.findViewById(R.id.jeniskendaraantext);
             keperluan = itemView.findViewById(R.id.keperluantext);
             masukjam = itemView.findViewById(R.id.masukjamtext);
+            nomormasuk = itemView.findViewById(R.id.nomormasuk);
             kelparkir = itemView.findViewById(R.id.btn_kelparkir);
             delparkir = itemView.findViewById(R.id.btn_delparkir);
             delparkir.setOnClickListener(v -> {

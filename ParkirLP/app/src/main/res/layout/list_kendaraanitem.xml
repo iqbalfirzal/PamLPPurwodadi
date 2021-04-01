@@ -5,6 +5,21 @@
     android:orientation="vertical"
     android:paddingBottom="10dp"
     android:background="@drawable/bg_list_item">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/nomormasuk"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:text="No" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -64,6 +79,7 @@
                 android:background="@color/dark"
                 android:alpha="0.7"/>
         </LinearLayout>
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
