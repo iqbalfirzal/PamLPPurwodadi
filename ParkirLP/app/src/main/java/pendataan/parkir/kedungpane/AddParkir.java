@@ -29,7 +29,7 @@ import eightbitlab.com.blurview.RenderScriptBlur;
 public class AddParkir extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private BlurView blurbgform;
-    private EditText plat;
+    private EditText plat,keperluan;
     private Spinner jk;
 
     @Override
@@ -38,6 +38,7 @@ public class AddParkir extends AppCompatActivity {
         setContentView(R.layout.activity_add_parkir);
         blurbgform = findViewById(R.id.formtambahkendaraan);
         plat = findViewById(R.id.platnomor);
+        keperluan = findViewById(R.id.keperluan);
         jk = findViewById(R.id.jeniskendaraan_opt);
         Button addparkir = findViewById(R.id.btn_daftarparkir);
         ImageButton backaddparkir = findViewById(R.id.btn_back_addparkir);
@@ -82,13 +83,14 @@ public class AddParkir extends AppCompatActivity {
         Map<String, Object> docData = new HashMap<>();
         docData.put("jeniskendaraan", jk.getSelectedItem().toString());
         docData.put("keluarjam", new Date());
+        docData.put("keperluan", String.valueOf(keperluan.getText()));
         docData.put("masukjam", new Date());
         docData.put("platnomor", String.valueOf(plat.getText()));
         docData.put("sudahkeluar", false);
         db.collection("parkir").document()
                 .set(docData)
                 .addOnSuccessListener(aVoid -> {
-                    plat.setText("");
+                    plat.setText("");keperluan.setText("");
                     Toast.makeText(AddParkir.this,"Data berhasil disimpan",Toast.LENGTH_LONG).show();
                 }).addOnFailureListener(e -> Toast.makeText(AddParkir.this,"Gagal menambahkan data! Periksa koneksi.",Toast.LENGTH_LONG).show());
     }

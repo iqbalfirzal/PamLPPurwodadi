@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Objects;
 
@@ -33,7 +34,10 @@ public class ListParkirAdapter extends FirestoreRecyclerAdapter<ParkirModel, Lis
     @Override
     protected void onBindViewHolder(@NonNull ListParkirHolder holder, int position, @NonNull ParkirModel model) {
         holder.platnomor.setText("Plat Nomor : "+model.getPlatNomor());
-        holder.jeniskendaraan.setText("Jenis Kendaraan : "+model.getJenisKendaraan());
+        holder.jeniskendaraan.setText("Kendaraan     : "+model.getJenisKendaraan());
+        holder.keperluan.setText("Keperluan      : "+model.getKeperluan());
+        holder.masukjam.setText("Masuk jam     : "+formatJam(model.getMasukJam()));
+
     }
 
     @NonNull
@@ -45,13 +49,15 @@ public class ListParkirAdapter extends FirestoreRecyclerAdapter<ParkirModel, Lis
     }
 
     class ListParkirHolder extends RecyclerView.ViewHolder {
-        TextView platnomor, jeniskendaraan;
+        TextView platnomor,jeniskendaraan,keperluan,masukjam;
         ImageButton kelparkir, delparkir;
 
         public ListParkirHolder(View itemView) {
             super(itemView);
             platnomor = itemView.findViewById(R.id.platnomortext);
             jeniskendaraan = itemView.findViewById(R.id.jeniskendaraantext);
+            keperluan = itemView.findViewById(R.id.keperluantext);
+            masukjam = itemView.findViewById(R.id.masukjamtext);
             kelparkir = itemView.findViewById(R.id.btn_kelparkir);
             delparkir = itemView.findViewById(R.id.btn_delparkir);
             delparkir.setOnClickListener(v -> {
@@ -86,8 +92,18 @@ public class ListParkirAdapter extends FirestoreRecyclerAdapter<ParkirModel, Lis
     }
 
     private void UpdateData(int position){
+        progressDialog = new ProgressDialog(context);
+        progressDialog.isIndeterminate();
+        progressDialog.setMessage("Memperbarui data...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
         getSnapshots().getSnapshot(position).getReference().update("keluarjam",new Date(),"sudahkeluar",true);
         notifyItemRemoved(position);
         progressDialog.dismiss();
+    }
+
+    private String formatJam(Date tanggal){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatTanggal = new SimpleDateFormat("HH:mm:ss");
+        return formatTanggal.format(tanggal);
     }
 }
