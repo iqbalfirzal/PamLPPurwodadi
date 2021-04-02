@@ -85,7 +85,7 @@ public class AddParkir extends AppCompatActivity {
         docData.put("keluarjam", new Date());
         docData.put("keperluan", String.valueOf(keperluan.getText()));
         docData.put("masukjam", new Date());
-        docData.put("platnomor", String.valueOf(plat.getText()));
+        docData.put("platnomor", String.valueOf(plat.getText()).toUpperCase());
         docData.put("sudahkeluar", false);
         db.collection("parkir").document()
                 .set(docData)

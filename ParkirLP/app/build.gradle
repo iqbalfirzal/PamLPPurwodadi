@@ -4,6 +4,17 @@ plugins {
 }
 
 android {
+    lintOptions {
+        checkReleaseBuilds false
+    }
+    signingConfigs {
+        release {
+        storeFile file('D:\\AndroidAppProject\\myky.jks')
+            storePassword 'lapassmg'
+            keyAlias 'lapassmg'
+            keyPassword 'lapassmg'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
@@ -30,7 +41,6 @@ android {
 }
 
 dependencies {
-
     implementation platform('com.google.firebase:firebase-bom:26.8.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'androidx.appcompat:appcompat:1.2.0'
@@ -42,4 +52,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation 'com.eightbitlab:blurview:1.6.3'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0'
 }
