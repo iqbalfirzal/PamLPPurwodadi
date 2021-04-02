@@ -1,8 +1,8 @@
 package pendataan.parkir.kedungpane;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,11 +23,12 @@ import java.util.Objects;
 
 public class ListParkirAdapter extends FirestoreRecyclerAdapter<ParkirModel, ListParkirAdapter.ListParkirHolder> {
     private final Context context;
-    private ProgressDialog progressDialog;
+    private final RecyclerView recyclerView;
 
     public ListParkirAdapter(@NonNull FirestoreRecyclerOptions<ParkirModel> options, Context context) {
         super(options);
         this.context = context;
+        recyclerView = ((Activity) context).findViewById(R.id.rvparkir);
     }
 
     @SuppressLint("SetTextI18n")
@@ -46,6 +47,20 @@ public class ListParkirAdapter extends FirestoreRecyclerAdapter<ParkirModel, Lis
         View v = LayoutInflater.from(context).inflate(R.layout.list_kendaraanitem,
                 parent, false);
         return new ListParkirHolder(v);
+    }
+
+    private void deleteData(int position){
+        getSnapshots().getSnapshot(position).getReference().delete();
+        stopListening();
+        startListening();
+        recyclerView.smoothScrollToPosition(0);
+    }
+
+    private void UpdateData(int position){
+        getSnapshots().getSnapshot(position).getReference().update("keluarjam",new Date(),"sudahkeluar",true);
+        stopListening();
+        startListening();
+        recyclerView.smoothScrollToPosition(0);
     }
 
     class ListParkirHolder extends RecyclerView.ViewHolder {
@@ -67,15 +82,7 @@ public class ListParkirAdapter extends FirestoreRecyclerAdapter<ParkirModel, Lis
                 builder.setTitle("Hapus Data Parkir");
                 builder.setMessage("Yakin untuk menghapus data ini?");
                 builder.setCancelable(false);
-                builder.setPositiveButton("Iya", (dialog, which) -> {
-                    progressDialog = new ProgressDialog(context);
-                    progressDialog.isIndeterminate();
-                    progressDialog.setMessage("Sedang menghapus data...");
-                    progressDialog.setTitle("Hapus Data Parkir");
-                    progressDialog.setCancelable(false);
-                    progressDialog.show();
-                    deleteData(position);
-                });
+                builder.setPositiveButton("Iya", (dialog, which) -> deleteData(position));
                 builder.setNegativeButton("Tidak", (dialog, which) -> dialog.dismiss());
                 builder.show();
             });
@@ -84,23 +91,6 @@ public class ListParkirAdapter extends FirestoreRecyclerAdapter<ParkirModel, Lis
                 UpdateData(position);
             });
         }
-    }
-
-    private void deleteData(int position){
-        getSnapshots().getSnapshot(position).getReference().delete();
-        notifyItemRemoved(position);
-        progressDialog.dismiss();
-    }
-
-    private void UpdateData(int position){
-        progressDialog = new ProgressDialog(context);
-        progressDialog.isIndeterminate();
-        progressDialog.setMessage("Memperbarui data...");
-        progressDialog.setCancelable(false);
-        progressDialog.show();
-        getSnapshots().getSnapshot(position).getReference().update("keluarjam",new Date(),"sudahkeluar",true);
-        notifyItemRemoved(position);
-        progressDialog.dismiss();
     }
 
     private String formatJam(Date tanggal){

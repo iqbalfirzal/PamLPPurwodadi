@@ -11,19 +11,14 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
@@ -34,7 +29,6 @@ public class OutParkir extends AppCompatActivity {
     private BlurView blurbgform;
     private ListParkirAdapter adapter;
     private RecyclerView recyclerView;
-    private Date ldate,gdate;
     private Query query;
 
     @Override
@@ -45,10 +39,7 @@ public class OutParkir extends AppCompatActivity {
         EditText cari = findViewById(R.id.cariplatnomor);
         recyclerView = findViewById(R.id.rvparkir);
         ImageButton backlist = findViewById(R.id.btn_back_listparkir);
-        setUpTanggal();
-        query = dbRef.orderBy("masukjam")
-                .whereGreaterThan("masukjam", new Timestamp(gdate))
-                .whereLessThan("masukjam", new Timestamp(ldate)).whereEqualTo("sudahkeluar",false);
+        query = dbRef.orderBy("masukjam").whereEqualTo("sudahkeluar",false);
         setUpRecycleView();
         cari.addTextChangedListener(new TextWatcher() {
             @Override
@@ -58,14 +49,10 @@ public class OutParkir extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 adapter.stopListening();
                 if(s.toString().length()!=0){
-                    query = dbRef.whereEqualTo("sudahkeluar",false).orderBy("masukjam")
-                            .whereGreaterThan("masukjam", new Timestamp(gdate))
-                            .whereLessThan("masukjam", new Timestamp(ldate))
-                            .whereEqualTo("platnomor",s.toString());
+                    query = dbRef.orderBy("platnomor")
+                            .whereEqualTo("sudahkeluar",false).startAt(s.toString().toUpperCase().trim()).endAt(s.toString().toUpperCase().trim() + "\uf8ff");
                 }else{
-                    query = dbRef.orderBy("masukjam")
-                            .whereGreaterThan("masukjam", new Timestamp(gdate))
-                            .whereLessThan("masukjam", new Timestamp(ldate)).whereEqualTo("sudahkeluar",false);
+                    query = dbRef.orderBy("masukjam").whereEqualTo("sudahkeluar",false);
                 }
                 setUpRecycleView();
                 adapter.startListening();
@@ -75,6 +62,12 @@ public class OutParkir extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
 
             }
+        });
+        cari.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId==EditorInfo.IME_ACTION_SEARCH){
+                adapter.notifyDataSetChanged();
+            }
+            return false;
         });
         backlist.setOnClickListener(v -> {
             Intent intent = new Intent(OutParkir.this, MainActivity.class);
@@ -94,21 +87,6 @@ public class OutParkir extends AppCompatActivity {
                 .setBlurAlgorithm(new RenderScriptBlur(this))
                 .setBlurRadius(radius)
                 .setHasFixedTransformationMatrix(true);
-    }
-
-    private  void setUpTanggal(){
-        Date today = new Date();
-        SimpleDateFormat todayDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String dateFormated = todayDateFormat.format(today);
-        String lessDate = dateFormated+" 23:59:59";
-        String greatDate = dateFormated+" 00:00:01";
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss", Locale.getDefault());
-        try{
-            ldate = dateFormat.parse(lessDate);
-            gdate = dateFormat.parse(greatDate);
-        } catch (ParseException e){
-            e.printStackTrace();
-        }
     }
 
     private  void setUpRecycleView(){
