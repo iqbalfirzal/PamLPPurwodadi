@@ -5,14 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_wave"
-    tools:context=".AddParkir">
+    tools:context=".MainActivity3">
 
     <TextView
         android:id="@+id/addwbptxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:text="Kendaraan Masuk  "
+        android:gravity="start"
+        android:text="Kirim Laporan  "
         android:theme="@style/TitleTextStyle"
         android:layout_marginTop="40dp"
         android:layout_marginStart="20dp"
@@ -51,11 +51,11 @@
                 android:textSize="18sp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="IDENTITAS KENDARAAN"
+                android:text="DETAIL LAPORAN"
                 android:textStyle="bold"/>
 
             <EditText
-                android:id="@+id/platnomor"
+                android:id="@+id/namapelapor"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
@@ -70,29 +70,18 @@
                 android:textColor="#000000"
                 android:theme="@style/EditTextTheme" />
 
-            <Spinner
-                android:id="@+id/jeniskendaraan_opt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:background="@drawable/bg_edittext"
-                android:inputType="text"
-                android:lines="1"
-                android:padding="12dp"
-                android:textColor="#000000"
-                android:theme="@style/EditTextTheme" />
-
             <EditText
-                android:id="@+id/keperluan"
+                android:id="@+id/isilaporan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
+                android:gravity="top"
                 android:background="@drawable/bg_edittext"
-                android:hint="Keperluan"
-                android:inputType="textCapWords"
-                android:lines="1"
+                android:hint="Isi Laporan"
+                android:inputType="textCapSentences|textMultiLine"
+                android:lines="4"
+                android:maxLines="4"
                 android:padding="12dp"
-                android:singleLine="true"
                 android:text=""
                 android:textColor="#000000"
                 android:theme="@style/EditTextTheme" />
@@ -101,10 +90,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:text="• Catatan : Pastikan data yang diisi sesuai"/>
+                android:text="• Catatan : Rincian waktu laporan tercatat otomatis sesuai saat laporan dikirim"/>
 
             <Button
-                android:id="@+id/btn_daftarparkir"
+                android:id="@+id/btn_kirimlaporan"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="20dp"
@@ -112,11 +101,11 @@
                 android:layout_marginVertical="20dp"
                 android:background="@drawable/bg_button"
                 android:padding="10dp"
-                android:text="TAMBAHKAN"
+                android:text="KIRIM"
                 android:textColor="#FFFFFF" />
 
             <ImageButton
-                android:id="@+id/btn_back_addparkir"
+                android:id="@+id/btn_back_addlaporan"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
