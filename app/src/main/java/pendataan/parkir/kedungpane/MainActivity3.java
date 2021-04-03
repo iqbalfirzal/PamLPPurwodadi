@@ -6,14 +6,12 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.zxing.integration.android.IntentIntegrator;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -31,18 +29,15 @@ public class MainActivity3 extends AppCompatActivity {
         isilaporan = findViewById(R.id.isilaporan);
         Button kirim = findViewById(R.id.btn_kirimlaporan);
         ImageButton back = findViewById(R.id.btn_back_addlaporan);
-        kirim.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(TextUtils.isEmpty(namapelapor.getText().toString())|TextUtils.isEmpty(isilaporan.getText().toString())){
-                    Toast.makeText(getApplication(), "Mohon Isi Seluruh Kolom.", Toast.LENGTH_SHORT).show();
-                }else{
-                    confirmKirim();
-                }
+        kirim.setOnClickListener(v -> {
+            if(TextUtils.isEmpty(namapelapor.getText().toString())|TextUtils.isEmpty(isilaporan.getText().toString())){
+                Toast.makeText(getApplication(), "Mohon Isi Seluruh Kolom.", Toast.LENGTH_SHORT).show();
+            }else{
+                confirmKirim();
             }
         });
         back.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity3.this, MainActivity.class);
+            Intent intent = new Intent(MainActivity3.this, Welcome.class);
             startActivity(intent);
             finish();
         });
