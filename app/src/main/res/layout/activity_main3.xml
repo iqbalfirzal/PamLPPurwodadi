@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
                 android:background="@drawable/bg_edittext"
-                android:hint="Plat Nomor"
+                android:hint="Nama Anda"
                 android:inputType="textCapCharacters"
                 android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                 android:lines="1"
