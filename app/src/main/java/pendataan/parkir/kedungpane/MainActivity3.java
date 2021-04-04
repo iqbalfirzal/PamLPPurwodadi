@@ -60,8 +60,9 @@ public class MainActivity3 extends AppCompatActivity {
         docData.put("tgllaporan", new Date());
         db.collection("lapsus")
                 .document().set(docData)
-                .addOnSuccessListener(aVoid -> Toast.makeText(MainActivity3.this,"Laporan berhasil terkirim.",Toast.LENGTH_LONG).show())
-                .addOnFailureListener(e -> Toast.makeText(MainActivity3.this,"Gagal menambahkan data! Periksa koneksi.",Toast.LENGTH_LONG).show());
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(MainActivity3.this,"Data berhasil disimpan.",Toast.LENGTH_LONG).show();finish();
+                }).addOnFailureListener(e -> Toast.makeText(MainActivity3.this,"Gagal menambahkan data! Periksa koneksi.",Toast.LENGTH_LONG).show());
     }
 
 }

@@ -242,7 +242,7 @@ public class MainActivity2 extends AppCompatActivity {
                 .document().set(docData)
                 .addOnSuccessListener(aVoid -> {
                     namapetugas.setText("");takenPhotoPath = null;datafotopetugas = null;progressDialog.dismiss();
-                    Toast.makeText(MainActivity2.this,"Laporan terkirim.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity2.this,"Laporan terkirim.",Toast.LENGTH_LONG).show();finish();
                 }).addOnFailureListener(e -> Toast.makeText(MainActivity2.this,"Gagal menambahkan data! Periksa koneksi.",Toast.LENGTH_LONG).show());
     }
 
