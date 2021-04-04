@@ -11,7 +11,7 @@
         android:id="@+id/addwbptxt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:gravity="start"
         android:text="Kendaraan Masuk  "
         android:theme="@style/TitleTextStyle"
         android:layout_marginTop="40dp"
@@ -186,7 +186,7 @@
                 android:layout_marginBottom="70dp"
                 android:background="@drawable/bg_button"
                 android:padding="10dp"
-                android:text="OKE, LANJUT"
+                android:text="OKE, LANJUT >"
                 android:textColor="#FFFFFF" />
 
         </LinearLayout>

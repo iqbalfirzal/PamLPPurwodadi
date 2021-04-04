@@ -16,14 +16,14 @@
         android:theme="@style/TitleTextStyle"
         android:layout_marginTop="40dp"
         android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toTopOf="@id/formtambahkendaraan"
+        app:layout_constraintBottom_toTopOf="@id/formtambahlapsus"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <eightbitlab.com.blurview.BlurView
-        android:id="@+id/formtambahkendaraan"
+        android:id="@+id/formtambahlapsus"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
