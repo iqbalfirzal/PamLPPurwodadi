@@ -6,8 +6,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="ANDROID.PERMISSION.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera" />
 
     <application
@@ -17,17 +20,18 @@
         android:roundIcon="@drawable/ic_shield"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkirLPKedungpane">
-        <activity android:name=".MainActivity3"></activity>
-        <activity
-            android:name=".MainActivity2"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".Welcome">
+        <activity android:name=".Login" android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity3" />
+        <activity
+            android:name=".MainActivity2"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".Welcome"/>
         <activity
             android:name=".OutParkir"
             android:windowSoftInputMode="adjustPan" />
@@ -35,6 +39,7 @@
             android:name=".AddParkir"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".MainActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.camprovider"
