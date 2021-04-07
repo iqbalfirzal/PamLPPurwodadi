@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class PrefManager {
-    private Context context;
+    private final Context context;
 
     PrefManager(Context context) {
         this.context = context;
@@ -20,24 +20,16 @@ public class PrefManager {
         editor.apply();
     }
 
-    String getUsername() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("Username", "");
-    }
-
-    String getPassword() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("Password", "");
-    }
-
-    String getEmail() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("Password", "");
-    }
-
     String getRegu() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         return sharedPreferences.getString("Regu", "");
+    }
+
+    boolean isUserLogedOut() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        boolean isEmailEmpty = sharedPreferences.getString("Email", "").isEmpty();
+        boolean isPasswordEmpty = sharedPreferences.getString("Password", "").isEmpty();
+        return isEmailEmpty || isPasswordEmpty;
     }
 
     void clearData() {

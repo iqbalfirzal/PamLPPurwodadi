@@ -18,12 +18,10 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,18 +35,16 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity2 extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference folderstorage;
     private ProgressDialog progressDialog;
-    private EditText namapetugas;
-    private Spinner regu;
+    private EditText namapetugas, regu;
     private ImageView fotopetugas;
     private Uri datafotopetugas;
     private String takenPhotoPath = null;
@@ -63,7 +59,7 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         folderstorage = FirebaseStorage.getInstance().getReference();
         namapetugas = findViewById(R.id.namapetugas);
-        regu = findViewById(R.id.regu_opt);
+        regu = findViewById(R.id.regu);
         Button scan = findViewById(R.id.btn_scan);
         Button tambahfoto = findViewById(R.id.btn_tambahfotolaporan);
         ImageView fotoilustrasi = findViewById(R.id.fotoilustrasi);
@@ -82,7 +78,7 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
         scan.setOnClickListener(v -> {
-            if(TextUtils.isEmpty(namapetugas.getText().toString())|regu.getSelectedItem()==null){
+            if(TextUtils.isEmpty(namapetugas.getText().toString())|TextUtils.isEmpty(regu.getText().toString())){
                 Toast.makeText(getApplication(), "Mohon Isi Nama Petugas.", Toast.LENGTH_SHORT).show();
             }else{
                 exeScan();
@@ -92,16 +88,12 @@ public class MainActivity2 extends AppCompatActivity {
             checkPermission(Manifest.permission.CAMERA, CAMERA_PERMISSION_CODE);
             pickFoto();
         });
-        setUpSpinnerRegu();
+        setUpRegu();
     }
 
-    private void setUpSpinnerRegu() {
-        List<String> list = new ArrayList<>();
-        list.add("REGU 1");list.add("REGU 2");list.add("REGU 3");list.add("REGU 4");
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, list);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        regu.setAdapter(dataAdapter);
+    private void setUpRegu() {
+        regu.setText(new PrefManager(this).getRegu());
+        regu.setEnabled(false);
     }
 
     public void checkPermission(String permission, int requestCode)
@@ -186,7 +178,7 @@ public class MainActivity2 extends AppCompatActivity {
             final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Kirim Laporan Kontrol ?");
             builder.setMessage("Nama Petugas : "+namapetugas.getText().toString()
-                    +"\nRegu : "+regu.getSelectedItem().toString()+"\nPos Kontrol : "+namacekpoin);
+                    +"\nRegu : "+regu.getText().toString()+"\nPos Kontrol : "+namacekpoin);
             builder.setCancelable(false);
             builder.setPositiveButton("Kirim", (dialog, which) -> kirimData(namacekpoin));
             builder.setNegativeButton("Batal", (dialog, which) -> dialog.dismiss());
@@ -209,13 +201,14 @@ public class MainActivity2 extends AppCompatActivity {
             final StorageReference lokasifoto = folderstorage.child("fotowasrik").child("control").child(namapetugas.getText().toString()+"_"+datafotopetugas.getLastPathSegment());
             lokasifoto.putFile(datafotopetugas).continueWithTask(task -> {
                 if (!task.isSuccessful()){
-                    throw task.getException();
+                    throw Objects.requireNonNull(task.getException());
                 }
                 return lokasifoto.getDownloadUrl();
             }).addOnCompleteListener(task -> {
                 if (task.isSuccessful()){
                     Uri downUri = task.getResult();
                     fotopetugas.setImageResource(R.drawable.ic_camera);
+                    assert downUri != null;
                     deleteTempFiles(namacekpoin, downUri.toString());
                 }
             });
@@ -237,7 +230,7 @@ public class MainActivity2 extends AppCompatActivity {
         docData.put("jamkontrol", new Date());
         docData.put("petugas", String.valueOf(namapetugas.getText()));
         docData.put("poskontrol", namacekpoin);
-        docData.put("regu", regu.getSelectedItem().toString());
+        docData.put("regu", String.valueOf(regu.getText()));
         db.collection("kontrolwasrik")
                 .document().set(docData)
                 .addOnSuccessListener(aVoid -> {

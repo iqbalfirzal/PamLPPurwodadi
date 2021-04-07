@@ -2,23 +2,30 @@ package pendataan.parkir.kedungpane;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.widget.Button;
+import android.widget.ImageButton;
 
-import java.util.Objects;
+import com.google.firebase.auth.FirebaseAuth;
+
 
 public class Welcome extends AppCompatActivity {
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        auth = FirebaseAuth.getInstance();
+        ImageButton btnlogout = findViewById(R.id.btn_logout);
         Button etraffic = findViewById(R.id.btn_etraffic);
         Button econtrol = findViewById(R.id.btn_econtrol);
         Button elapsus = findViewById(R.id.btn_elapsus);
         Button eimei = findViewById(R.id.btn_eimei);
+        btnlogout.setOnClickListener(v -> confirmRekapLogout());
         etraffic.setOnClickListener(v -> {
             Intent intent = new Intent(Welcome.this, MainActivity.class);
             startActivity(intent);
@@ -31,19 +38,41 @@ public class Welcome extends AppCompatActivity {
             Intent intent = new Intent(Welcome.this, MainActivity3.class);
             startActivity(intent);
         });
-        eimei.setOnClickListener(v -> {
-            showDialogDalamPengembangan();
-        });
+        eimei.setOnClickListener(v -> showDialogDalamPengembangan());
 
     }
 
     private void showDialogDalamPengembangan(){
-        final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(Objects.requireNonNull(this));
-        LayoutInflater inflater = getLayoutInflater();
+        final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(Welcome.this);
         builder.setTitle("Mohon Maaf");
         builder.setMessage("Fitur ini masih dalam pengembangan.");
         builder.setCancelable(true);
         builder.setPositiveButton("Oke", (dialog, which) -> dialog.dismiss());
         builder.show();
+    }
+
+    private void confirmRekapLogout() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
+        builder.setTitle("Keluar");
+        builder.setMessage("Yakin ingin lalu keluar?");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Iya", (dialog, which) -> {
+            ProgressDialog.show(Welcome.this, "Logout","Mohon tunggu...\nAnda akan otomatis logout setelah ini.", true,false);
+            auth.signOut();
+            clearLoginData();
+            startActivity(new Intent(Welcome.this, Login.class));
+            finish();
+        });
+        builder.setNegativeButton("Tidak", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    private void clearLoginData(){
+        new PrefManager(Welcome.this.getApplicationContext()).clearData();
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveTaskToBack(true);
     }
 }
