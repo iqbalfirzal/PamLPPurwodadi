@@ -40,13 +40,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import id.zelory.compressor.Compressor;
+
 public class MainActivity2 extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference folderstorage;
     private ProgressDialog progressDialog;
     private EditText namapetugas, regu;
     private ImageView fotopetugas;
-    private Uri datafotopetugas;
+    private Uri datafotopetugas, compresseddatafotopetugas;
     private String takenPhotoPath = null;
     private static final int STORAGE_PERMISSION_CODE = 1010;
     private static final int CAMERA_PERMISSION_CODE = 1011;
@@ -146,6 +148,7 @@ public class MainActivity2 extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == TAKE_CAMERA_FOTO) {
             if(resultCode == RESULT_OK){
+                compresseddatafotopetugas = Uri.fromFile(Compressor.getDefault(this).compressToFile(new File(takenPhotoPath)));
                 datafotopetugas = Uri.fromFile(new File(takenPhotoPath));
                 fotopetugas.setImageURI(datafotopetugas);
             }else {
@@ -199,7 +202,7 @@ public class MainActivity2 extends AppCompatActivity {
             exeKirimData(namacekpoin, "");
         }else{
             final StorageReference lokasifoto = folderstorage.child("fotowasrik").child("control").child(namapetugas.getText().toString()+"_"+datafotopetugas.getLastPathSegment());
-            lokasifoto.putFile(datafotopetugas).continueWithTask(task -> {
+            lokasifoto.putFile(compresseddatafotopetugas).continueWithTask(task -> {
                 if (!task.isSuccessful()){
                     throw Objects.requireNonNull(task.getException());
                 }

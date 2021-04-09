@@ -41,6 +41,7 @@ import java.util.Map;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
+import id.zelory.compressor.Compressor;
 
 public class AddParkir extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -50,7 +51,7 @@ public class AddParkir extends AppCompatActivity {
     private EditText plat,keperluan;
     private Spinner jk;
     private ImageView fotokendaraan;
-    private Uri datafotokendaraan;
+    private Uri datafotokendaraan, compresseddatafotokendaraan;
     private String takenPhotoPath = null;
     private static final int STORAGE_PERMISSION_CODE = 1010;
     private static final int CAMERA_PERMISSION_CODE = 1011;
@@ -174,6 +175,7 @@ public class AddParkir extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
         if(requestCode == TAKE_CAMERA_FOTO) {
             if(resultCode == RESULT_OK){
+                compresseddatafotokendaraan = Uri.fromFile(Compressor.getDefault(this).compressToFile(new File(takenPhotoPath)));
                 datafotokendaraan = Uri.fromFile(new File(takenPhotoPath));
                 fotokendaraan.setImageURI(datafotokendaraan);
             }
@@ -182,7 +184,7 @@ public class AddParkir extends AppCompatActivity {
 
     private void uploadFoto(){
         final StorageReference lokasifoto = folderstorage.child("fotowasrik").child("traffic").child(plat.getText().toString()+"_"+datafotokendaraan.getLastPathSegment());
-        lokasifoto.putFile(datafotokendaraan).continueWithTask(task -> {
+        lokasifoto.putFile(compresseddatafotokendaraan).continueWithTask(task -> {
             if (!task.isSuccessful()){
                 throw task.getException();
             }
