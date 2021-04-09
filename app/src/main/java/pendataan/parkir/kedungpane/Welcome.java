@@ -54,7 +54,7 @@ public class Welcome extends AppCompatActivity {
     private void confirmRekapLogout() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(Welcome.this);
         builder.setTitle("Keluar");
-        builder.setMessage("Yakin ingin lalu keluar?");
+        builder.setMessage("Yakin ingin keluar?");
         builder.setCancelable(false);
         builder.setPositiveButton("Iya", (dialog, which) -> {
             ProgressDialog.show(Welcome.this, "Logout","Mohon tunggu...\nAnda akan otomatis logout setelah ini.", true,false);
