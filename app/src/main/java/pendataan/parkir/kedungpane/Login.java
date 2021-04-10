@@ -47,10 +47,14 @@ public class Login extends AppCompatActivity {
             if(username.length() > 0 && password.length() > 0){
                 DocumentReference loginguser = db.collection("petugas").document(username);
                 loginguser.get().addOnSuccessListener(ds -> {
-                    if (ds.get("email") != null) {
-                        String userEmail =  Objects.requireNonNull(ds.get("email")).toString();
-                        String userRegu =  Objects.requireNonNull(ds.get("regu")).toString();
-                        performLogin(userEmail, username, password, userRegu);
+                    if (ds.get("password") != null) {
+                        if (Objects.requireNonNull(ds.get("password")).toString().equals(password)) {
+                            String userRegu = Objects.requireNonNull(ds.get("regu")).toString();
+                            performLogin(username, password, userRegu);
+                        }else{
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(Login.this, "Password salah!", Toast.LENGTH_LONG).show();
+                        }
                     } else {
                         progressBar.setVisibility(View.GONE);
                         Toast.makeText(Login.this, "Username tidak terdaftar!", Toast.LENGTH_LONG).show();
@@ -106,14 +110,14 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    private void performLogin(final String emailId, String username, String password, String regu) {
-            auth.signInWithEmailAndPassword(emailId,password).addOnCompleteListener(Login.this, task -> {
+    private void performLogin(String username, String password, String regu) {
+            auth.signInWithEmailAndPassword("wasrik1@lpsmg.go.id","wasrik1").addOnCompleteListener(Login.this, task -> {
                 progressBar.setVisibility(View.GONE);
                 if(!task.isSuccessful()){
                     Toast.makeText(Login.this, "Password salah.",
                             Toast.LENGTH_LONG).show();
                 }else{
-                    saveLoginDetails(emailId, username, password, regu);
+                    saveLoginDetails(username, password, regu);
                     Intent intent = new Intent(Login.this, Welcome.class);
                     startActivity(intent);
                     finish();
@@ -121,8 +125,8 @@ public class Login extends AppCompatActivity {
             });
     }
 
-    private void saveLoginDetails(String email, String username, String password, String regu){
-        new PrefManager(this).saveLoginDetails(email, username, password, regu);
+    private void saveLoginDetails(String username, String password, String regu){
+        new PrefManager(this).saveLoginDetails(username, password, regu);
     }
 
 }
