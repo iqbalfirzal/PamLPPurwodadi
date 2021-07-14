@@ -26,7 +26,7 @@ public class Login extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private ConstraintLayout laymain;
-    private EditText usernamenya, passwordnya;
+    private EditText nipnya, pinnya;
     private ProgressBar progressBar;
 
     @Override
@@ -36,28 +36,29 @@ public class Login extends AppCompatActivity {
         laymain = findViewById(R.id.layloginwelcome);
         db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
-        usernamenya = findViewById(R.id.username);
-        passwordnya = findViewById(R.id.password);
+        nipnya = findViewById(R.id.nip);
+        pinnya = findViewById(R.id.pin);
         progressBar = findViewById(R.id.progressBar);
         Button masuk = findViewById(R.id.btn_login);
         masuk.setOnClickListener(v -> {
-            final String username = usernamenya.getText().toString() ;
-            final String password = passwordnya.getText().toString() ;
+            final String nip = nipnya.getText().toString() ;
+            final String pin = pinnya.getText().toString() ;
             progressBar.setVisibility(View.VISIBLE);
-            if(username.length() > 0 && password.length() > 0){
-                DocumentReference loginguser = db.collection("petugas").document(username);
+            if(nip.length() > 0 && pin.length() > 0){
+                DocumentReference loginguser = db.collection("petugas").document(nip);
                 loginguser.get().addOnSuccessListener(ds -> {
-                    if (ds.get("password") != null) {
-                        if (Objects.requireNonNull(ds.get("password")).toString().equals(password)) {
+                    if (ds.get("pin") != null) {
+                        if (Objects.requireNonNull(ds.get("pin")).toString().equals(pin)) {
+                            String userNama =  Objects.requireNonNull(ds.get("nama")).toString();
                             String userRegu = Objects.requireNonNull(ds.get("regu")).toString();
-                            performLogin(username, password, userRegu);
+                            performLogin(nip, userNama, pin, userRegu);
                         }else{
                             progressBar.setVisibility(View.GONE);
                             Toast.makeText(Login.this, "Password salah!", Toast.LENGTH_LONG).show();
                         }
                     } else {
                         progressBar.setVisibility(View.GONE);
-                        Toast.makeText(Login.this, "Username tidak terdaftar!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Login.this, "NIP tidak terdaftar!", Toast.LENGTH_LONG).show();
                     }
                 }).addOnFailureListener(e -> {
                     progressBar.setVisibility(View.GONE);
@@ -66,7 +67,7 @@ public class Login extends AppCompatActivity {
 
             }else{
                 progressBar.setVisibility(View.GONE);
-                Toast.makeText(Login.this, "Username atau Password kosong!", Toast.LENGTH_LONG).show();
+                Toast.makeText(Login.this, "NIP atau PIN kosong!", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -110,23 +111,22 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    private void performLogin(String username, String password, String regu) {
-            auth.signInWithEmailAndPassword("wasrik1@lpsmg.go.id","wasrik1").addOnCompleteListener(Login.this, task -> {
-                progressBar.setVisibility(View.GONE);
-                if(!task.isSuccessful()){
-                    Toast.makeText(Login.this, "Password salah.",
-                            Toast.LENGTH_LONG).show();
-                }else{
-                    saveLoginDetails(username, password, regu);
-                    Intent intent = new Intent(Login.this, Welcome.class);
-                    startActivity(intent);
-                    finish();
-                }
-            });
+    private void performLogin(final String nip, String nama, String pin, String regu) {
+        auth.signInWithEmailAndPassword("wasrik1@lpsmg.go.id","wasrik1").addOnCompleteListener(Login.this, task -> {
+            progressBar.setVisibility(View.GONE);
+            if(!task.isSuccessful()){
+                Toast.makeText(Login.this,"Gagal login! Periksa koneksi.",Toast.LENGTH_LONG).show();
+            }else{
+                saveLoginDetails(nip, nama, pin, regu);
+                Intent intent = new Intent(Login.this, Welcome.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
-    private void saveLoginDetails(String username, String password, String regu){
-        new PrefManager(this).saveLoginDetails(username, password, regu);
+    private void saveLoginDetails(String nip, String nama, String password, String regu){
+        new PrefManager(this).saveLoginDetails(nip, nama, password, regu);
     }
 
 }

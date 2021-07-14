@@ -24,6 +24,7 @@ public class Welcome extends AppCompatActivity {
         Button etraffic = findViewById(R.id.btn_etraffic);
         Button econtrol = findViewById(R.id.btn_econtrol);
         Button elapsus = findViewById(R.id.btn_elapsus);
+        Button gantipin = findViewById(R.id.btn_gantipin);
         Button eimei = findViewById(R.id.btn_eimei);
         btnlogout.setOnClickListener(v -> confirmRekapLogout());
         etraffic.setOnClickListener(v -> {
@@ -36,6 +37,10 @@ public class Welcome extends AppCompatActivity {
         });
         elapsus.setOnClickListener(v -> {
             Intent intent = new Intent(Welcome.this, MainActivity3.class);
+            startActivity(intent);
+        });
+        gantipin.setOnClickListener(v -> {
+            Intent intent = new Intent(Welcome.this, ChangePin.class);
             startActivity(intent);
         });
         eimei.setOnClickListener(v -> showDialogDalamPengembangan());

@@ -10,25 +10,50 @@ public class PrefManager {
         this.context = context;
     }
 
-    void saveLoginDetails(String username, String password, String regu) {
+    void saveLoginDetails(String nip, String nama, String pin, String regu) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("Username", username);
-        editor.putString("Password", password);
-        editor.putString("Regu", regu);
+        editor.putString("nip", nip);
+        editor.putString("nama", nama);
+        editor.putString("pin", pin);
+        editor.putString("regu", regu);
+        editor.apply();
+    }
+
+    void updateLoginDetails(String nama, String pin, String regu) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("nama", nama);
+        editor.putString("pin", pin);
+        editor.putString("regu", regu);
         editor.apply();
     }
 
     String getRegu() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-        return sharedPreferences.getString("Regu", "");
+        return sharedPreferences.getString("regu", "");
+    }
+
+    String getPin() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("pin", "");
+    }
+
+    String getNama() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("nama", "");
+    }
+
+    String getNip() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("nip", "");
     }
 
     boolean isUserLogedOut() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
-        boolean isUsernameEmpty = sharedPreferences.getString("Username", "").isEmpty();
-        boolean isPasswordEmpty = sharedPreferences.getString("Password", "").isEmpty();
-        return isUsernameEmpty || isPasswordEmpty;
+        boolean isEmailEmpty = sharedPreferences.getString("nip", "").isEmpty();
+        boolean isPasswordEmpty = sharedPreferences.getString("pin", "").isEmpty();
+        return isEmailEmpty || isPasswordEmpty;
     }
 
     void clearData() {

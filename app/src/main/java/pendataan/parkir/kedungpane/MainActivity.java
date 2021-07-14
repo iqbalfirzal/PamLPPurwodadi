@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ImageButton btnmasuk = findViewById(R.id.btn_posmasuk);
         ImageButton btnkeluar = findViewById(R.id.btn_poskeluar);
+        ImageButton back = findViewById(R.id.btn_back_maintraffic);
         btnmasuk.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddParkir.class);
             startActivity(intent);
@@ -24,5 +25,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+        back.setOnClickListener(v -> finish());
     }
 }

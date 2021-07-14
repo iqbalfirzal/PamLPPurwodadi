@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:background="@drawable/bg_wave"
-    tools:context=".AddParkir">
+    tools:context=".ChangePin">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,21 +18,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:text="Kendaraan Masuk  "
+            android:text="Ubah Data Akun  "
             android:theme="@style/TitleTextStyle"
             android:layout_marginTop="40dp"
             android:layout_marginStart="20dp"
-            app:layout_constraintBottom_toTopOf="@id/formtambahkendaraan"
+            app:layout_constraintBottom_toTopOf="@id/formeditpin"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <eightbitlab.com.blurview.BlurView
-            android:id="@+id/formtambahkendaraan"
+            android:id="@+id/formeditpin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/bg_shape"
             android:elevation="1dp"
@@ -42,16 +43,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/addwbptxt"
-            app:layout_constraintWidth_max="600dp"
-            android:animateLayoutChanges="true">
+            app:layout_constraintWidth_max="500dp">
 
             <LinearLayout
-                android:id="@+id/identitaskendaraan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:animateLayoutChanges="true"
-                android:visibility="visible">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -60,17 +57,17 @@
                     android:textSize="18sp"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:text="IDENTITAS KENDARAAN"
+                    android:text="IDENTITAS DIRI"
                     android:textStyle="bold"/>
 
                 <EditText
-                    android:id="@+id/platnomor"
+                    android:id="@+id/namapengguna"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/bg_edittext"
-                    android:hint="Plat Nomor"
-                    android:inputType="textCapCharacters"
+                    android:hint="Nama Lengkap Anda"
+                    android:inputType="textCapWords"
                     android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
                     android:lines="1"
                     android:padding="12dp"
@@ -80,7 +77,7 @@
                     android:theme="@style/EditTextTheme" />
 
                 <Spinner
-                    android:id="@+id/jeniskendaraan_opt"
+                    android:id="@+id/regu_opt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
@@ -92,16 +89,18 @@
                     android:theme="@style/EditTextTheme" />
 
                 <EditText
-                    android:id="@+id/keperluan"
+                    android:id="@+id/pinpengguna"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="10dp"
                     android:background="@drawable/bg_edittext"
-                    android:hint="Keperluan"
-                    android:inputType="textCapWords"
+                    android:hint="PIN"
+                    android:inputType="textPassword"
+                    android:digits="0123456789"
                     android:lines="1"
                     android:padding="12dp"
                     android:singleLine="true"
+                    android:maxLength="6"
                     android:text=""
                     android:textColor="#000000"
                     android:theme="@style/EditTextTheme" />
@@ -110,100 +109,29 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:text="• Catatan : Pastikan data yang diisi sesuai"/>
-
+                    android:text="• Catatan : Ingat selalu PIN anda"/>
 
                 <Button
-                    android:id="@+id/btn_tambahfoto"
+                    android:id="@+id/btn_gantipin"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="20dp"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_button"
-                    android:padding="10dp"
-                    android:text="TAMBAH FOTO >"
-                    android:textColor="#FFFFFF" />
-
-                <Button
-                    android:id="@+id/btn_daftarparkir"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="70dp"
+                    android:layout_marginVertical="20dp"
                     android:background="@drawable/bg_button"
                     android:padding="10dp"
                     android:text="SIMPAN"
                     android:textColor="#FFFFFF" />
 
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/tambahfoto"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:animateLayoutChanges="true"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:textSize="18sp"
+                <ImageButton
+                    android:id="@+id/btn_back_changepin"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="FOTO (OPTIONAL)"
-                    android:textStyle="bold"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_shape">
-
-                        <ImageView
-                            android:id="@+id/fotokendaraan"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:minWidth="100dp"
-                            android:minHeight="100dp"
-                            android:maxWidth="150dp"
-                            android:maxHeight="150dp"
-                            android:layout_marginBottom="10dp"
-                            android:src="@drawable/ic_camera" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:text="• Catatan : Kirim foto hanya jika dirasa perlu"/>
-
-                <Button
-                    android:id="@+id/btn_back_kirimfoto"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="20dp"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="70dp"
                     android:background="@drawable/bg_button"
-                    android:padding="10dp"
-                    android:text="OKE, LANJUT >"
-                    android:textColor="#FFFFFF" />
+                    android:src="@drawable/ic_arrow_back"/>
 
             </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/btn_back_addparkir"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="bottom|center"
-                android:background="@drawable/bg_button"
-                android:src="@drawable/ic_arrow_back"/>
 
         </eightbitlab.com.blurview.BlurView>
 

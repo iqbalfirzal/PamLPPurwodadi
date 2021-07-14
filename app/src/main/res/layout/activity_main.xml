@@ -190,6 +190,14 @@
 
                     </LinearLayout>
 
+                    <ImageButton
+                        android:id="@+id/btn_back_maintraffic"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginVertical="20dp"
+                        android:background="@drawable/bg_button"
+                        android:src="@drawable/ic_arrow_back"/>
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>
@@ -200,8 +208,8 @@
             android:id="@+id/separator"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:minHeight="80dp"
-            android:maxHeight="100dp"
+            android:minHeight="40dp"
+            android:maxHeight="60dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/welcomemainbody2"

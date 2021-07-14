@@ -46,7 +46,7 @@ public class MainActivity2 extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private StorageReference folderstorage;
     private ProgressDialog progressDialog;
-    private EditText namapetugas, regu;
+    private EditText namapetugas, regu, keterangan;
     private ImageView fotopetugas;
     private Uri datafotopetugas, compresseddatafotopetugas;
     private String takenPhotoPath = null;
@@ -62,6 +62,7 @@ public class MainActivity2 extends AppCompatActivity {
         folderstorage = FirebaseStorage.getInstance().getReference();
         namapetugas = findViewById(R.id.namapetugas);
         regu = findViewById(R.id.regu);
+        keterangan = findViewById(R.id.keterangan);
         Button scan = findViewById(R.id.btn_scan);
         Button tambahfoto = findViewById(R.id.btn_tambahfotolaporan);
         ImageView fotoilustrasi = findViewById(R.id.fotoilustrasi);
@@ -80,8 +81,8 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
         scan.setOnClickListener(v -> {
-            if(TextUtils.isEmpty(namapetugas.getText().toString())|TextUtils.isEmpty(regu.getText().toString())){
-                Toast.makeText(getApplication(), "Mohon Isi Nama Petugas.", Toast.LENGTH_SHORT).show();
+            if(TextUtils.isEmpty(namapetugas.getText().toString())|TextUtils.isEmpty(keterangan.getText().toString())|TextUtils.isEmpty(regu.getText().toString())){
+                Toast.makeText(getApplication(), "Masih ada kolom yang kosong.", Toast.LENGTH_SHORT).show();
             }else{
                 exeScan();
             }
@@ -107,7 +108,6 @@ public class MainActivity2 extends AppCompatActivity {
                     new String[] { permission },
                     requestCode);
         }
-        else {        }
     }
 
     @SuppressLint("QueryPermissionsNeeded")
@@ -234,6 +234,7 @@ public class MainActivity2 extends AppCompatActivity {
         docData.put("petugas", String.valueOf(namapetugas.getText()));
         docData.put("poskontrol", namacekpoin);
         docData.put("regu", String.valueOf(regu.getText()));
+        docData.put("keterangan", String.valueOf(keterangan.getText()));
         db.collection("kontrolwasrik")
                 .document().set(docData)
                 .addOnSuccessListener(aVoid -> {

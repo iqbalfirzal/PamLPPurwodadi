@@ -21,7 +21,13 @@
         android:roundIcon="@drawable/ic_shield"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkirLPKedungpane">
-        <activity android:name=".Login" android:windowSoftInputMode="adjustPan">
+        <activity android:name=".ChangePin"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".HistoryParkir"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".Login"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,7 +38,7 @@
         <activity
             android:name=".MainActivity2"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".Welcome"/>
+        <activity android:name=".Welcome" />
         <activity
             android:name=".OutParkir"
             android:windowSoftInputMode="adjustPan" />

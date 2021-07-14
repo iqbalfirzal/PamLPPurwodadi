@@ -38,6 +38,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import eightbitlab.com.blurview.BlurView;
 import eightbitlab.com.blurview.RenderScriptBlur;
@@ -142,7 +143,6 @@ public class AddParkir extends AppCompatActivity {
                     new String[] { permission },
                     requestCode);
         }
-        else {        }
     }
 
     @SuppressLint("QueryPermissionsNeeded")
@@ -186,13 +186,14 @@ public class AddParkir extends AppCompatActivity {
         final StorageReference lokasifoto = folderstorage.child("fotowasrik").child("traffic").child(plat.getText().toString()+"_"+datafotokendaraan.getLastPathSegment());
         lokasifoto.putFile(compresseddatafotokendaraan).continueWithTask(task -> {
             if (!task.isSuccessful()){
-                throw task.getException();
+                throw Objects.requireNonNull(task.getException());
             }
             return lokasifoto.getDownloadUrl();
         }).addOnCompleteListener(task -> {
             if (task.isSuccessful()){
                 Uri downUri = task.getResult();
                 fotokendaraan.setImageResource(R.drawable.ic_camera);
+                assert downUri != null;
                 deleteTempFiles(downUri.toString());
             }
         });

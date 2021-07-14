@@ -125,6 +125,14 @@
                 android:background="@drawable/bg_btn_purple"
                 android:layout_marginBottom="10dp"/>
 
+            <Button
+                android:id="@+id/btn_gantipin"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="GANTI PIN"
+                android:background="@drawable/bg_btn_purple"
+                android:layout_marginBottom="10dp"/>
+
                 <Button
                     android:id="@+id/btn_eimei"
                     android:layout_width="match_parent"

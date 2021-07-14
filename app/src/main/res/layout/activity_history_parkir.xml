@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true"
@@ -7,7 +8,7 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:background="@drawable/bg_wave"
-    tools:context=".OutParkir">
+    tools:context=".HistoryParkir">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:text="Kendaraan Terparkir  "
+            android:text="Riwayat Kendaraan  "
             android:theme="@style/TitleTextStyle"
             android:layout_marginTop="40dp"
             android:layout_marginStart="20dp"
@@ -47,14 +48,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="660dp"
+                android:layout_height="600dp"
                 android:minHeight="100dp"
                 android:orientation="vertical">
 
                 <EditText
                     android:id="@+id/cariplatnomor"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:layout_marginVertical="10dp"
                     android:layout_marginHorizontal="5dp"
                     android:background="@drawable/bg_edittext"
@@ -72,14 +73,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_marginBottom="100dp"
+                    android:layout_marginBottom="60dp"
                     android:background="@drawable/bg_shape">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvparkir"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        tools:listitem="@layout/list_kendaraanitem" />
+                        tools:listitem="@layout/list_historikendaraanitem" />
 
                 </LinearLayout>
 
@@ -92,14 +93,8 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/btn_riw_parkir"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="RIAWAYAT KENDARAAN"/>
-
                 <ImageButton
-                    android:id="@+id/btn_back_listparkir"
+                    android:id="@+id/btn_back_listhistoriparkir"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:background="@drawable/bg_button"
@@ -110,4 +105,5 @@
         </eightbitlab.com.blurview.BlurView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.core.widget.NestedScrollView>
