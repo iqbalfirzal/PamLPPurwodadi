@@ -63,6 +63,7 @@ public class MainActivity3 extends AppCompatActivity {
         LinearLayout tambahfoto = findViewById(R.id.tambahfoto);
         blurbgform = findViewById(R.id.formtambahlapsus);
         namapelapor = findViewById(R.id.namapelapor);
+        namapelapor.setText(new PrefManager(this).getNama());
         isilaporan = findViewById(R.id.isilaporan);
         Button addfoto = findViewById(R.id.btn_tambahfoto);
         Button backfoto = findViewById(R.id.btn_back_kirimfoto);

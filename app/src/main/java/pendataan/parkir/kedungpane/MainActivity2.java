@@ -1,21 +1,20 @@
 package pendataan.parkir.kedungpane;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +23,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
+
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -52,7 +58,11 @@ public class MainActivity2 extends AppCompatActivity {
     private String takenPhotoPath = null;
     private static final int STORAGE_PERMISSION_CODE = 1010;
     private static final int CAMERA_PERMISSION_CODE = 1011;
+    private static final int REQUEST_FINE_LOCATION_CODE = 1111;
+    private static final int REQUEST_COARSE_LOCATION_CODE = 1101;
     private static final int TAKE_CAMERA_FOTO = 10;
+    LocationManager locationManager;
+    LocationListener locationListener;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -61,12 +71,14 @@ public class MainActivity2 extends AppCompatActivity {
         setContentView(R.layout.activity_main2);
         folderstorage = FirebaseStorage.getInstance().getReference();
         namapetugas = findViewById(R.id.namapetugas);
+        namapetugas.setText(new PrefManager(this).getNama());
         regu = findViewById(R.id.regu);
         keterangan = findViewById(R.id.keterangan);
         Button scan = findViewById(R.id.btn_scan);
         Button tambahfoto = findViewById(R.id.btn_tambahfotolaporan);
         ImageView fotoilustrasi = findViewById(R.id.fotoilustrasi);
         fotopetugas = findViewById(R.id.fotopetugas);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LinearLayout laytambahfoto = findViewById(R.id.layfotopetugas);
         tambahfoto.setOnClickListener(v -> {
             checkPermission(Manifest.permission.CAMERA, STORAGE_PERMISSION_CODE);
@@ -81,10 +93,16 @@ public class MainActivity2 extends AppCompatActivity {
             }
         });
         scan.setOnClickListener(v -> {
-            if(TextUtils.isEmpty(namapetugas.getText().toString())|TextUtils.isEmpty(keterangan.getText().toString())|TextUtils.isEmpty(regu.getText().toString())){
-                Toast.makeText(getApplication(), "Masih ada kolom yang kosong.", Toast.LENGTH_SHORT).show();
-            }else{
-                exeScan();
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                onGPS();
+            } else {
+                checkPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_FINE_LOCATION_CODE);
+                checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_COARSE_LOCATION_CODE);
+                if (TextUtils.isEmpty(namapetugas.getText().toString()) | TextUtils.isEmpty(keterangan.getText().toString()) | TextUtils.isEmpty(regu.getText().toString())) {
+                    Toast.makeText(getApplication(), "Masih ada kolom yang kosong.", Toast.LENGTH_SHORT).show();
+                } else {
+                    exeScan();
+                }
             }
         });
         fotopetugas.setOnClickListener(v -> {
@@ -97,6 +115,17 @@ public class MainActivity2 extends AppCompatActivity {
     private void setUpRegu() {
         regu.setText(new PrefManager(this).getRegu());
         regu.setEnabled(false);
+    }
+
+    private void onGPS() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(false);
+        builder.setMessage("Nyalakan dulu GPS nya").setCancelable(false)
+                .setPositiveButton("Oke", (dialog, which) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
+                .setNegativeButton("Tidak", (dialog, which) -> { dialog.cancel(); finish();
+        });
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     public void checkPermission(String permission, int requestCode)
@@ -164,7 +193,7 @@ public class MainActivity2 extends AppCompatActivity {
                         JSONObject obj = new JSONObject(intentResult.getContents());
                         String namalp = (obj.getString("namalp"));
                         String namacekpoin = (obj.getString("namacekpoin"));
-                        confirmKirimData(namalp,namacekpoin);
+                        dapatkanLokasidanData(namalp,namacekpoin);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(this, intentResult.getContents(), Toast.LENGTH_LONG).show();
@@ -176,19 +205,62 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
-    private void confirmKirimData(String namalp, String namacekpoin){
+    private void dapatkanLokasidanData(String namalp, String namacekpoin){
         if(namalp.equals("kedungpane")){
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Kirim Laporan Kontrol ?");
-            builder.setMessage("Nama Petugas : "+namapetugas.getText().toString()
-                    +"\nRegu : "+regu.getText().toString()+"\nPos Kontrol : "+namacekpoin);
-            builder.setCancelable(false);
-            builder.setPositiveButton("Kirim", (dialog, which) -> kirimData(namacekpoin));
-            builder.setNegativeButton("Batal", (dialog, which) -> dialog.dismiss());
-            builder.show();
+            if (ActivityCompat.checkSelfPermission(
+                    MainActivity2.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    MainActivity2.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION_CODE);
+            } else {
+                Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (locationGPS != null) {
+                    double lat = locationGPS.getLatitude();
+                    double longi = locationGPS.getLongitude();
+                    DocumentReference lokasigeopos = db.collection("titiklokasipos").document(namacekpoin);
+                    lokasigeopos.get().addOnSuccessListener(ds -> {
+                        double lat2 = Objects.requireNonNull(ds.getGeoPoint("geo")).getLatitude();
+                        double longi2 = Objects.requireNonNull(ds.getGeoPoint("geo")).getLongitude();
+                        if(selisihJarak(lat,longi,lat2,longi2) < 0.09){
+                            confirmKirimData(namacekpoin);
+                        }else{
+                            Toast.makeText(MainActivity2.this,"LAPORAN GAGAL. Anda tidak berada di titik pos kontrol : "+namacekpoin,Toast.LENGTH_LONG).show();
+                        }
+                    }).addOnFailureListener(e -> Toast.makeText(MainActivity2.this, "Gagal membaca data lokasi. Mohon periksa koneksi.", Toast.LENGTH_LONG).show());
+                } else {
+                    ///
+                    //
+                    locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
+                    //
+                    ///
+                    Toast.makeText(this, "Tidak dapat menemukan lokasi, coba lagi.", Toast.LENGTH_SHORT).show();
+                }
+            }
         }else{
             Toast.makeText(MainActivity2.this,"Scan QR Code yang telah ditentukan.",Toast.LENGTH_LONG).show();
         }
+    }
+
+    private double selisihJarak(double lat1, double lng1, double lat2, double lng2) {
+        double earthRadius = 3958.75;
+        double dLat = Math.toRadians(lat2-lat1);
+        double dLng = Math.toRadians(lng2-lng1);
+        double sindLat = Math.sin(dLat / 2);
+        double sindLng = Math.sin(dLng / 2);
+        double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
+                * Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2));
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        return earthRadius * c;
+    }
+
+    private void confirmKirimData(String namacekpoin){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Kirim Laporan Kontrol ?");
+        builder.setMessage("Nama Petugas : "+namapetugas.getText().toString()
+                +"\nRegu : "+regu.getText().toString()+"\nPos Kontrol : "+namacekpoin);
+        builder.setCancelable(false);
+        builder.setPositiveButton("Kirim", (dialog, which) -> kirimData(namacekpoin));
+        builder.setNegativeButton("Batal", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 
     private void kirimData(String namacekpoin){
