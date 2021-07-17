@@ -178,8 +178,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="30dp"
                 android:text="SCAN QR-CODE"
                 android:background="@drawable/bg_btn_purple" />
+
+            <ImageButton
+                android:id="@+id/btn_back_control"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="bottom|center"
+                android:background="@drawable/bg_button"
+                android:src="@drawable/ic_arrow_back"/>
 
         </LinearLayout>
 

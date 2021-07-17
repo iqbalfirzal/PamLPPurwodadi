@@ -59,6 +59,7 @@ public class ChangePin extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 1011;
     private static final int TAKE_CAMERA_FOTO_AKUN = 101;
     private static final int LOAD_FROM_GALLERY_FOTO_AKUN = 111;
+    private String linkfoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -242,11 +243,15 @@ public class ChangePin extends AppCompatActivity {
 
     private void UpdateDataFoto(final Uri urifotoakun){
         Map<String, Object> docData = new HashMap<>();
+        docData.put("nama", new PrefManager(this).getNama());
+        docData.put("pin", new PrefManager(this).getPin());
+        docData.put("regu", new PrefManager(this).getRegu());
         docData.put("foto", String.valueOf(urifotoakun));
         db.collection("petugas").document(new PrefManager(this).getNip())
                 .set(docData)
                 .addOnSuccessListener(aVoid -> {
                     progressDialog.dismiss();
+                    linkfoto = String.valueOf(urifotoakun);
                     new PrefManager(this).updateFoto(String.valueOf(urifotoakun));
                 }).addOnFailureListener(e -> {
             progressDialog.dismiss();
@@ -272,6 +277,7 @@ public class ChangePin extends AppCompatActivity {
         docData.put("nama", String.valueOf(namapengguna.getText()));
         docData.put("pin", String.valueOf(pinpengguna.getText()));
         docData.put("regu", reguopt.getSelectedItem().toString());
+        docData.put("foto", new PrefManager(this).getFoto());
         db.collection("petugas").document(new PrefManager(this).getNip())
                 .set(docData)
                 .addOnSuccessListener(aVoid -> {

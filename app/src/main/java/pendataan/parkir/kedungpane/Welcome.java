@@ -2,12 +2,15 @@ package pendataan.parkir.kedungpane;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -15,12 +18,16 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Welcome extends AppCompatActivity {
     private FirebaseAuth auth;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         auth = FirebaseAuth.getInstance();
         ImageButton btnlogout = findViewById(R.id.btn_logout);
+        TextView petugasnya = findViewById(R.id.petugasnya);
+        petugasnya.setText(new PrefManager(this).getNama()+"\n"+new PrefManager(this).getRegu());
         Button etraffic = findViewById(R.id.btn_etraffic);
         Button econtrol = findViewById(R.id.btn_econtrol);
         Button elapsus = findViewById(R.id.btn_elapsus);

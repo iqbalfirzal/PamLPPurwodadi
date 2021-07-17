@@ -13,12 +13,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="106dp"
+            android:background="@drawable/bg_wave2"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
             android:id="@+id/laytopwelcome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="60dp"
             android:layout_marginBottom="10dp"
             android:layout_marginStart="20dp"
             android:weightSum="4"
@@ -32,7 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:layout_weight="3"
+                android:layout_weight="4"
                 android:text="E - Wasrik  \nLP Kedungpane   "
                 android:theme="@style/TitleTextStyle" />
 
@@ -65,23 +73,65 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:minHeight="150dp"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:padding="10dp"
-                android:orientation="vertical"
+                android:orientation="horizontal"
+                android:weightSum="2"
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="20dp">
 
-                <ImageView
-                    android:src="@drawable/ic_guard"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:adjustViewBounds="true"
-                    android:minWidth="100dp"
-                    android:maxWidth="500dp"
-                    android:minHeight="240dp"
-                    android:maxHeight="600dp"
-                    android:layout_gravity="center"/>
+                    android:orientation="vertical"
+                    android:layout_weight="1.3"
+                    android:layout_gravity="top">
+
+                    <ImageView
+                        android:src="@drawable/ic_polsuspas"
+                        android:backgroundTint="@color/black"
+                        android:background="@drawable/bg_shape"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:layout_gravity="start"/>
+
+                    <TextView
+                        android:id="@+id/petugasnya"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:text="NAMA DAN REGU PETUGAS"
+                        android:textAllCaps="true"
+                        android:layout_gravity="center"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="10dp"
+                    android:orientation="vertical"
+                    android:layout_gravity="top"
+                    android:layout_weight="0.7">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="INSTRUKSI PIMPINAN :"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
+                        android:nestedScrollingEnabled="true"
+                        android:textIsSelectable="true"
+                        android:text="Disini nantinya akan berisi instruksi pimpinan kepada seluruh petugas"/>
+
+                </LinearLayout>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -100,45 +150,93 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5">
 
+            <Button
+                android:id="@+id/btn_emergencycall"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_margin="5dp"
+                android:text="EMERGENCY CALL"
+                android:backgroundTint="@color/red"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="5dp"
+                android:layout_weight="2">
 
                 <Button
                     android:id="@+id/btn_etraffic"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:layout_marginEnd="5dp"
+                    android:layout_weight="1"
                     android:text="E - TRAFFIC"
                     android:background="@drawable/bg_btn_purple"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="10dp"
+                    tools:ignore="NestedWeights" />
 
                 <Button
                     android:id="@+id/btn_econtrol"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:layout_marginStart="5dp"
+                    android:layout_weight="1"
                     android:text="E - CONTROL"
                     android:background="@drawable/bg_btn_purple"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="10dp"
+                    tools:ignore="NestedWeights"/>
+
+            </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:layout_weight="2">
 
             <Button
                 android:id="@+id/btn_elapsus"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="1"
                 android:text="E - LAPSUS"
                 android:background="@drawable/bg_btn_purple"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                tools:ignore="NestedWeights"/>
 
             <Button
                 android:id="@+id/btn_gantipin"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
                 android:text="GANTI PIN"
                 android:background="@drawable/bg_btn_purple"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                tools:ignore="NestedWeights"/>
+
+        </LinearLayout>
 
                 <Button
+                    android:visibility="gone"
                     android:id="@+id/btn_eimei"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:layout_margin="5dp"
                     android:text="E - IMEI (Underconstruction)"
                     android:background="@drawable/bg_btn_purple"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textSize="10dp"
+                android:text="Copyright 2021 / IT LP Kedungpane"/>
 
         </LinearLayout>
 

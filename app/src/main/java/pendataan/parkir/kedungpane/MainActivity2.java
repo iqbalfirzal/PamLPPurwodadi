@@ -77,6 +77,7 @@ public class MainActivity2 extends AppCompatActivity {
         Button scan = findViewById(R.id.btn_scan);
         Button tambahfoto = findViewById(R.id.btn_tambahfotolaporan);
         ImageView fotoilustrasi = findViewById(R.id.fotoilustrasi);
+        ImageView back = findViewById(R.id.btn_back_control);
         fotopetugas = findViewById(R.id.fotopetugas);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LinearLayout laytambahfoto = findViewById(R.id.layfotopetugas);
@@ -109,6 +110,7 @@ public class MainActivity2 extends AppCompatActivity {
             checkPermission(Manifest.permission.CAMERA, CAMERA_PERMISSION_CODE);
             pickFoto();
         });
+        back.setOnClickListener(v -> finish());
         setUpRegu();
     }
 
