@@ -1,191 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fillViewport="true"
     android:background="@drawable/bg_wave"
     tools:context=".MainActivity3">
 
-    <TextView
-        android:id="@+id/addwbptxt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        android:text="Kirim Laporan Khusus  "
-        android:theme="@style/TitleTextStyle"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toTopOf="@id/formtambahlapsus"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <eightbitlab.com.blurview.BlurView
-        android:id="@+id/formtambahlapsus"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/bg_shape"
-        android:elevation="1dp"
-        android:orientation="vertical"
-        android:padding="20dp"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/addwbptxt"
-        app:layout_constraintWidth_max="500dp"
-        android:animateLayoutChanges="true">
-
-        <LinearLayout
-            android:id="@+id/laporannya"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/addwbptxt"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:gravity="start"
+            android:text="Kirim Laporan Khusus  "
+            android:theme="@style/TitleTextStyle"
+            android:layout_marginTop="40dp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintBottom_toTopOf="@id/formtambahlapsus"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:textSize="18sp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="DETAIL LAPORAN"
-                android:textStyle="bold"/>
-
-            <EditText
-                android:id="@+id/namapelapor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:background="@drawable/bg_edittext"
-                android:hint="Nama Anda"
-                android:inputType="textCapCharacters"
-                android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-                android:lines="1"
-                android:padding="12dp"
-                android:singleLine="true"
-                android:text=""
-                android:textColor="#000000"
-                android:theme="@style/EditTextTheme" />
-
-            <EditText
-                android:id="@+id/isilaporan"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:gravity="top"
-                android:background="@drawable/bg_edittext"
-                android:hint="Isi Laporan"
-                android:inputType="textCapSentences|textMultiLine"
-                android:lines="4"
-                android:maxLines="4"
-                android:padding="12dp"
-                android:text=""
-                android:textColor="#000000"
-                android:theme="@style/EditTextTheme" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="• Catatan : Rincian waktu laporan tercatat otomatis sesuai saat laporan dikirim"/>
-
-            <Button
-                android:id="@+id/btn_tambahfoto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/bg_button"
-                android:padding="10dp"
-                android:text="TAMBAH FOTO >"
-                android:textColor="#FFFFFF" />
-
-            <Button
-                android:id="@+id/btn_kirimlaporan"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="70dp"
-                android:background="@drawable/bg_button"
-                android:padding="10dp"
-                android:text="KIRIM"
-                android:textColor="#FFFFFF" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tambahfoto"
-            android:layout_width="match_parent"
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/formtambahlapsus"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/bg_shape"
+            android:elevation="1dp"
             android:orientation="vertical"
-            android:animateLayoutChanges="true"
-            android:visibility="gone">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:textSize="18sp"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="FOTO (OPTIONAL)"
-                android:textStyle="bold"/>
+            android:padding="20dp"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addwbptxt"
+            app:layout_constraintWidth_max="500dp"
+            android:animateLayoutChanges="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/bg_shape">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:animateLayoutChanges="true">
 
-                <ImageView
-                    android:id="@+id/fotolaporan"
+                <LinearLayout
+                    android:id="@+id/laporannya"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:minWidth="100dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="DETAIL LAPORAN"
+                        android:textStyle="bold"/>
+
+                    <EditText
+                        android:id="@+id/namapelapor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:background="@drawable/bg_edittext"
+                        android:hint="Nama Anda"
+                        android:inputType="textCapCharacters"
+                        android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                        android:lines="1"
+                        android:padding="12dp"
+                        android:singleLine="true"
+                        android:text=""
+                        android:textColor="#000000"
+                        android:theme="@style/EditTextTheme" />
+
+                    <EditText
+                        android:id="@+id/isilaporan"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:gravity="top"
+                        android:background="@drawable/bg_edittext"
+                        android:hint="Isi Laporan"
+                        android:inputType="textCapSentences|textMultiLine"
+                        android:lines="4"
+                        android:maxLines="4"
+                        android:padding="12dp"
+                        android:text=""
+                        android:textColor="#000000"
+                        android:theme="@style/EditTextTheme" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="• Catatan : Rincian waktu laporan tercatat otomatis sesuai dengan waktu saat laporan dikirim"/>
+
+                    <Button
+                        android:id="@+id/btn_tambahfoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_button"
+                        android:padding="10dp"
+                        android:text="TAMBAH FOTO >"
+                        android:textColor="#FFFFFF" />
+
+                    <Button
+                        android:id="@+id/btn_kirimlaporan"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginVertical="20dp"
+                        android:background="@drawable/bg_button"
+                        android:padding="10dp"
+                        android:text="KIRIM"
+                        android:textColor="#FFFFFF" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tambahfoto"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:animateLayoutChanges="true"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="18sp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="FOTO (OPTIONAL)"
+                        android:textStyle="bold"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_shape">
+
+                        <ImageView
+                            android:id="@+id/fotolaporan"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:minWidth="100dp"
+                            android:minHeight="100dp"
+                            android:maxWidth="150dp"
+                            android:maxHeight="150dp"
+                            android:layout_marginBottom="10dp"
+                            android:src="@drawable/ic_camera" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textStyle="bold"
+                        android:text="• Catatan : Kirim foto jika dirasa perlu"/>
+
+                    <Button
+                        android:id="@+id/btn_back_kirimfoto"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginVertical="20dp"
+                        android:background="@drawable/bg_button"
+                        android:padding="10dp"
+                        android:text="OKE, LANJUT >"
+                        android:textColor="#FFFFFF" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="70dp"
+                    android:padding="10dp"
                     android:minHeight="100dp"
-                    android:maxWidth="150dp"
-                    android:maxHeight="150dp"
-                    android:layout_marginBottom="10dp"
-                    android:src="@drawable/ic_camera" />
+                    android:background="@drawable/bg_shape"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="RIWAYAT LAPORAN ANDA HARI INI"
+                        android:textStyle="bold"/>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="20dp"
+                            android:text="Belum Ada"
+                            android:layout_gravity="top"
+                            android:gravity="center"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvlaporan"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            tools:listitem="@layout/list_lapsusitem" />
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="• Catatan : Kirim foto jika dirasa perlu"/>
-
-            <Button
-                android:id="@+id/btn_back_kirimfoto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="70dp"
+            <ImageButton
+                android:id="@+id/btn_back_addlaporan"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom|center"
                 android:background="@drawable/bg_button"
-                android:padding="10dp"
-                android:text="OKE, LANJUT >"
-                android:textColor="#FFFFFF" />
+                android:src="@drawable/ic_arrow_back"/>
 
-        </LinearLayout>
+        </eightbitlab.com.blurview.BlurView>
 
-        <ImageButton
-            android:id="@+id/btn_back_addlaporan"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="bottom|center"
-            android:background="@drawable/bg_button"
-            android:src="@drawable/ic_arrow_back"/>
-
-    </eightbitlab.com.blurview.BlurView>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

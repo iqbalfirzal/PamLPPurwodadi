@@ -7,8 +7,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,8 +27,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -62,7 +63,6 @@ public class MainActivity2 extends AppCompatActivity {
     private static final int REQUEST_COARSE_LOCATION_CODE = 1101;
     private static final int TAKE_CAMERA_FOTO = 10;
     LocationManager locationManager;
-    LocationListener locationListener;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -151,8 +151,7 @@ public class MainActivity2 extends AppCompatActivity {
             } catch (Exception ex) {
                 Toast.makeText(getApplication(), ex.getMessage(), Toast.LENGTH_SHORT).show();
             }
-        }else
-        {
+        }else {
             Toast.makeText(getApplication(), "Foto kosong.", Toast.LENGTH_SHORT).show();
         }
     }
@@ -212,28 +211,25 @@ public class MainActivity2 extends AppCompatActivity {
                     MainActivity2.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION_CODE);
             } else {
-                Location locationGPS = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (locationGPS != null) {
-                    double lat = locationGPS.getLatitude();
-                    double longi = locationGPS.getLongitude();
-                    DocumentReference lokasigeopos = db.collection("titiklokasipos").document(namacekpoin);
-                    lokasigeopos.get().addOnSuccessListener(ds -> {
-                        double lat2 = Objects.requireNonNull(ds.getGeoPoint("geo")).getLatitude();
-                        double longi2 = Objects.requireNonNull(ds.getGeoPoint("geo")).getLongitude();
-                        if(selisihJarak(lat,longi,lat2,longi2) < 0.09){
-                            confirmKirimData(namacekpoin);
-                        }else{
-                            Toast.makeText(MainActivity2.this,"LAPORAN GAGAL. Anda tidak berada di titik pos kontrol : "+namacekpoin,Toast.LENGTH_LONG).show();
-                        }
-                    }).addOnFailureListener(e -> Toast.makeText(MainActivity2.this, "Gagal membaca data lokasi. Mohon periksa koneksi.", Toast.LENGTH_LONG).show());
-                } else {
-                    ///
-                    //
-                    locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, locationListener);
-                    //
-                    ///
-                    Toast.makeText(this, "Tidak dapat menemukan lokasi, coba lagi.", Toast.LENGTH_SHORT).show();
-                }
+                FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+                mFusedLocation.getLastLocation().addOnSuccessListener(this, location -> {
+                    if (location != null){
+                        double lat = location.getLatitude();
+                        double longi = location.getLongitude();
+                        DocumentReference lokasigeopos = db.collection("titiklokasipos").document(namacekpoin);
+                        lokasigeopos.get().addOnSuccessListener(ds -> {
+                            double lat2 = Objects.requireNonNull(ds.getGeoPoint("geo")).getLatitude();
+                            double longi2 = Objects.requireNonNull(ds.getGeoPoint("geo")).getLongitude();
+                            if(selisihJarak(lat,longi,lat2,longi2) < 0.09){
+                                confirmKirimData(namacekpoin,lat,longi);
+                            }else{
+                                Toast.makeText(MainActivity2.this,"LAPORAN GAGAL. Anda tidak berada di titik pos kontrol : "+namacekpoin,Toast.LENGTH_LONG).show();
+                            }
+                        }).addOnFailureListener(e -> Toast.makeText(MainActivity2.this, "Gagal membaca data lokasi. Mohon periksa koneksi.", Toast.LENGTH_LONG).show());
+                    }else {
+                        Toast.makeText(MainActivity2.this, "Tidak dapat menemukan lokasi, coba lagi.", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         }else{
             Toast.makeText(MainActivity2.this,"Scan QR Code yang telah ditentukan.",Toast.LENGTH_LONG).show();
@@ -252,18 +248,18 @@ public class MainActivity2 extends AppCompatActivity {
         return earthRadius * c;
     }
 
-    private void confirmKirimData(String namacekpoin){
+    private void confirmKirimData(String namacekpoin, double lat, double longi){
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Kirim Laporan Kontrol ?");
         builder.setMessage("Nama Petugas : "+namapetugas.getText().toString()
-                +"\nRegu : "+regu.getText().toString()+"\nPos Kontrol : "+namacekpoin);
+                +"\nRegu : "+regu.getText().toString()+"\nPos Kontrol : "+namacekpoin+"\nKeterangan : "+keterangan.getText().toString()+"\nTitik Koordinat Kontrol : "+ new GeoPoint(lat, longi));
         builder.setCancelable(false);
-        builder.setPositiveButton("Kirim", (dialog, which) -> kirimData(namacekpoin));
+        builder.setPositiveButton("Kirim", (dialog, which) -> kirimData(namacekpoin,lat,longi));
         builder.setNegativeButton("Batal", (dialog, which) -> dialog.dismiss());
         builder.show();
     }
 
-    private void kirimData(String namacekpoin){
+    private void kirimData(String namacekpoin, double lat, double longi){
         progressDialog = new ProgressDialog(MainActivity2.this);
         progressDialog.isIndeterminate();
         progressDialog.setMessage("Sedang mengunggah data...");
@@ -271,7 +267,7 @@ public class MainActivity2 extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
         if(datafotopetugas==null){
-            exeKirimData(namacekpoin, "");
+            exeKirimData(namacekpoin, "",lat,longi);
         }else{
             final StorageReference lokasifoto = folderstorage.child("fotowasrik").child("control").child(namapetugas.getText().toString()+"_"+datafotopetugas.getLastPathSegment());
             lokasifoto.putFile(compresseddatafotopetugas).continueWithTask(task -> {
@@ -284,28 +280,29 @@ public class MainActivity2 extends AppCompatActivity {
                     Uri downUri = task.getResult();
                     fotopetugas.setImageResource(R.drawable.ic_camera);
                     assert downUri != null;
-                    deleteTempFiles(namacekpoin, downUri.toString());
+                    deleteTempFiles(namacekpoin, downUri.toString(),lat,longi);
                 }
             });
         }
     }
 
-    private void deleteTempFiles(String cekpoin, String downurl) {
+    private void deleteTempFiles(String cekpoin, String downurl, double lat, double longi) {
         File delfoto = new File(datafotopetugas.getPath());
         if (delfoto.delete()) {
-            exeKirimData(cekpoin, downurl);
+            exeKirimData(cekpoin, downurl,lat,longi);
         } else {
-            exeKirimData(cekpoin, downurl);
+            exeKirimData(cekpoin, downurl,lat,longi);
         }
     }
 
-    private void exeKirimData(String namacekpoin, String foto){
+    private void exeKirimData(String namacekpoin, String foto, double lat, double longi){
         Map<String, Object> docData = new HashMap<>();
         docData.put("foto", foto);
         docData.put("jamkontrol", new Date());
         docData.put("petugas", String.valueOf(namapetugas.getText()));
         docData.put("poskontrol", namacekpoin);
         docData.put("regu", String.valueOf(regu.getText()));
+        docData.put("geo", new GeoPoint(lat,longi));
         docData.put("keterangan", String.valueOf(keterangan.getText()));
         db.collection("kontrolwasrik")
                 .document().set(docData)

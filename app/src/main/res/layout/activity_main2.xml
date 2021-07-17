@@ -178,7 +178,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_marginHorizontal="10dp"
-                android:text="SCAN BARCODE"
+                android:text="SCAN QR-CODE"
                 android:background="@drawable/bg_btn_purple" />
 
         </LinearLayout>

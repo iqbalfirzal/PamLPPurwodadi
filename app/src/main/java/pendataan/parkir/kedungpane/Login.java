@@ -51,7 +51,8 @@ public class Login extends AppCompatActivity {
                         if (Objects.requireNonNull(ds.get("pin")).toString().equals(pin)) {
                             String userNama =  Objects.requireNonNull(ds.get("nama")).toString();
                             String userRegu = Objects.requireNonNull(ds.get("regu")).toString();
-                            performLogin(nip, userNama, pin, userRegu);
+                            String userFoto = Objects.requireNonNull(ds.get("foto")).toString();
+                            performLogin(nip, userNama, pin, userRegu, userFoto);
                         }else{
                             progressBar.setVisibility(View.GONE);
                             Toast.makeText(Login.this, "Password salah!", Toast.LENGTH_LONG).show();
@@ -111,13 +112,13 @@ public class Login extends AppCompatActivity {
         }
     }
 
-    private void performLogin(final String nip, String nama, String pin, String regu) {
+    private void performLogin(final String nip, String nama, String pin, String regu, String foto) {
         auth.signInWithEmailAndPassword("wasrik1@lpsmg.go.id","wasrik1").addOnCompleteListener(Login.this, task -> {
             progressBar.setVisibility(View.GONE);
             if(!task.isSuccessful()){
                 Toast.makeText(Login.this,"Gagal login! Periksa koneksi.",Toast.LENGTH_LONG).show();
             }else{
-                saveLoginDetails(nip, nama, pin, regu);
+                saveLoginDetails(nip, nama, pin, regu, foto);
                 Intent intent = new Intent(Login.this, Welcome.class);
                 startActivity(intent);
                 finish();
@@ -125,8 +126,8 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void saveLoginDetails(String nip, String nama, String password, String regu){
-        new PrefManager(this).saveLoginDetails(nip, nama, password, regu);
+    private void saveLoginDetails(String nip, String nama, String password, String regu, String foto){
+        new PrefManager(this).saveLoginDetails(nip, nama, password, regu, foto);
     }
 
 }

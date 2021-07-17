@@ -10,13 +10,14 @@ public class PrefManager {
         this.context = context;
     }
 
-    void saveLoginDetails(String nip, String nama, String pin, String regu) {
+    void saveLoginDetails(String nip, String nama, String pin, String regu, String foto) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("nip", nip);
         editor.putString("nama", nama);
         editor.putString("pin", pin);
         editor.putString("regu", regu);
+        editor.putString("foto", foto);
         editor.apply();
     }
 
@@ -27,6 +28,18 @@ public class PrefManager {
         editor.putString("pin", pin);
         editor.putString("regu", regu);
         editor.apply();
+    }
+
+    void updateFoto(String foto) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("foto", foto);
+        editor.apply();
+    }
+
+    String getFoto() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("foto", "");
     }
 
     String getRegu() {
