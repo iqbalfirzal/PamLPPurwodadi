@@ -162,7 +162,6 @@ public class Welcome extends AppCompatActivity {
     }
 
     private void sendEmergencyCall(double lat, double longi){
-
         JSONObject json = new JSONObject();
         try {
             String nip = new PrefManager(this).getNip();

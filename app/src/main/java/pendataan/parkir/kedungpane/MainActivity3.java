@@ -15,6 +15,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,6 +32,10 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -41,6 +46,9 @@ import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -60,6 +68,8 @@ public class MainActivity3 extends AppCompatActivity {
     private final FirebaseFirestore db = FirebaseFirestore.getInstance();
     private final CollectionReference dbRef = db.collection("lapsus");
     private StorageReference folderstorage;
+    private RequestQueue mRequestQue;
+    private final String SENDNOTIFURL = "https://fcm.googleapis.com/fcm/send";
     private EditText namapelapor, isilaporan;
     private BlurView blurbgform;
     private ProgressDialog progressDialog;
@@ -83,6 +93,7 @@ public class MainActivity3 extends AppCompatActivity {
         setContentView(R.layout.activity_main3);
         folderstorage = FirebaseStorage.getInstance().getReference();
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        mRequestQue = Volley.newRequestQueue(this);
         LinearLayout form = findViewById(R.id.laporannya);
         LinearLayout tambahfoto = findViewById(R.id.tambahfoto);
         blurbgform = findViewById(R.id.formtambahlapsus);
@@ -165,7 +176,6 @@ public class MainActivity3 extends AppCompatActivity {
     }
 
     private void confirmKirim(){
-
         if (ActivityCompat.checkSelfPermission(
                 MainActivity3.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
                 MainActivity3.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -277,8 +287,49 @@ public class MainActivity3 extends AppCompatActivity {
         db.collection("lapsus")
                 .document().set(docData)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(MainActivity3.this,"Data berhasil disimpan.",Toast.LENGTH_LONG).show();finish();
+                    Toast.makeText(MainActivity3.this,"Data berhasil disimpan.",Toast.LENGTH_LONG).show();sendNotifLapsus();
                 }).addOnFailureListener(e -> Toast.makeText(MainActivity3.this,"Gagal menambahkan data! Periksa koneksi.",Toast.LENGTH_LONG).show());
+    }
+
+    private void sendNotifLapsus(){
+        JSONObject json = new JSONObject();
+        try {
+            String nama = namapelapor.getText().toString();
+            String pesan = isilaporan.getText().toString();
+
+            json.put("to","/topics/"+"umjoL1srorNjDvpmeocBJ1kN7pVTb4t9zgmsPCHIs");
+            JSONObject notificationObj = new JSONObject();
+            notificationObj.put("title", "Laporan Khusus Masuk Oleh : "+nama);
+            notificationObj.put("body", pesan);
+
+            JSONObject extraData = new JSONObject();
+            extraData.put("messagetype","lapsus");
+            extraData.put("sendername",nama);
+            extraData.put("message",pesan);
+
+            json.put("notification",notificationObj);
+            json.put("data",extraData);
+
+            JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SENDNOTIFURL,
+                    json,
+                    response -> finish(), error -> Log.d("MUR", "onError: "+error.networkResponse)
+            ){
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String,String> header = new HashMap<>();
+                    header.put("content-type","application/json");
+                    header.put("authorization","key=AAAA9qTy6zA:APA91bH8PJ5l5GfbXpr4XUErtv-Bbkc08ok3hotwKi1P39XCJWkCBtWAUqq5Q0gzaSguASf0LpODm77J5lz-K_MV6__DwDnQ_1Y0dgWFnS_-plT5ie8tU3rOaYcnNzbCNkMVYdGU0_dr");
+                    return header;
+                }
+            };
+            mRequestQue.add(request);
+        }
+        catch (JSONException e)
+
+        {
+            e.printStackTrace();
+        }
+
     }
 
     private void setUpRecyclerView(){
