@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -28,6 +29,8 @@ import com.android.volley.toolbox.Volley;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.messaging.FirebaseMessaging;
 
@@ -36,10 +39,12 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 
 public class Welcome extends AppCompatActivity {
     private FirebaseAuth auth;
+    private FirebaseFirestore db;
     private RequestQueue mRequestQue;
     private final String SENDNOTIFURL = "https://fcm.googleapis.com/fcm/send";
     private static final int REQUEST_FINE_LOCATION_CODE = 1111;
@@ -54,6 +59,20 @@ public class Welcome extends AppCompatActivity {
         FirebaseMessaging.getInstance().subscribeToTopic("umjoL1srorNjDvpmeocBJ1kN7pVTb4t9zgmsPCHIs");
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         auth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
+        TextView intruksipim = findViewById(R.id.instruksipim);
+        DocumentReference isiinstruksi = db.collection("instruksipimpinan").document("untukpam");
+        isiinstruksi.get().addOnSuccessListener(ds -> {
+            if (!Objects.equals(ds.get("kalapas"), "")) {
+                String ikalapas =  Objects.requireNonNull(ds.get("kalapas")).toString();
+                String ikplp = Objects.requireNonNull(ds.get("kplp")).toString();
+                intruksipim.setText("[ KALAPAS ] "+ikalapas+"\n\n[ KPLP ] "+ikplp);
+            } else {
+                intruksipim.setText("[ KALAPAS ] -\n\n[ KPLP ] -");
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(Welcome.this, "Gagal memuat instruksi pimpinan. Periksa koneksi Anda.", Toast.LENGTH_LONG).show();
+        });
         mRequestQue = Volley.newRequestQueue(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         ImageButton btnlogout = findViewById(R.id.btn_logout);
