@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/addwbptxt"
+            android:id="@+id/historyparkir"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
@@ -43,7 +43,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/addwbptxt"
+            app:layout_constraintTop_toBottomOf="@id/historyparkir"
             app:layout_constraintWidth_max="500dp">
 
             <LinearLayout
@@ -51,24 +51,6 @@
                 android:layout_height="600dp"
                 android:minHeight="100dp"
                 android:orientation="vertical">
-
-                <EditText
-                    android:id="@+id/cariplatnomor"
-                    android:visibility="invisible"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginVertical="10dp"
-                    android:layout_marginHorizontal="5dp"
-                    android:background="@drawable/bg_edittext"
-                    android:hint="Cari Plat Nomor"
-                    android:inputType="textCapCharacters"
-                    android:digits=" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-                    android:lines="1"
-                    android:padding="12dp"
-                    android:singleLine="true"
-                    android:text=""
-                    android:textColor="#000000"
-                    android:theme="@style/EditTextTheme" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

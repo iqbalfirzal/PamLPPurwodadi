@@ -34,7 +34,6 @@ public class HistoryParkir extends AppCompatActivity {
     private BlurView blurbgform;
     private ListHistoriParkirAdapter adapter;
     private RecyclerView recyclerView;
-    private Query query;
     private Date ldate,gdate;
 
     @Override
@@ -42,40 +41,9 @@ public class HistoryParkir extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_parkir);
         blurbgform = findViewById(R.id.listparkir);
-        EditText cari = findViewById(R.id.cariplatnomor);
         recyclerView = findViewById(R.id.rvparkir);
         ImageButton backlist = findViewById(R.id.btn_back_listhistoriparkir);
         setUpRecycleView();
-        cari.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                adapter.stopListening();
-                if(s.toString().length()!=0){
-                    query = dbRef.orderBy("platnomor")
-                            .whereEqualTo("sudahkeluar",true).startAt(s.toString().toUpperCase().trim()).endAt(s.toString().toUpperCase().trim() + "\uf8ff");
-                }else{
-                    query = dbRef.orderBy("masukjam")
-                            .whereGreaterThan("masukjam", new Timestamp(gdate))
-                            .whereLessThan("masukjam", new Timestamp(ldate)).whereEqualTo("sudahkeluar",true);
-                }
-                setUpRecycleView();
-                adapter.startListening();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        cari.setOnEditorActionListener((v, actionId, event) -> {
-            if(actionId== EditorInfo.IME_ACTION_SEARCH){
-                adapter.notifyDataSetChanged();
-            }
-            return false;
-        });
         backlist.setOnClickListener(v -> finish());
         blurinForm();
     }
@@ -105,10 +73,9 @@ public class HistoryParkir extends AppCompatActivity {
         } catch (ParseException e){
             e.printStackTrace();
         }assert ldate != null;assert gdate != null;
-        query = dbRef.orderBy("masukjam")
+        Query query = dbRef.orderBy("masukjam")
                 .whereGreaterThan("masukjam", new Timestamp(gdate))
-                .whereLessThan("masukjam", new Timestamp(ldate)).whereEqualTo("sudahkeluar",true);
-
+                .whereLessThan("masukjam", new Timestamp(ldate)).whereEqualTo("sudahkeluar", true);
         FirestoreRecyclerOptions<ParkirModel> options = new FirestoreRecyclerOptions.Builder<ParkirModel>().setQuery(query, ParkirModel.class).build();
         adapter = new ListHistoriParkirAdapter(options, this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
