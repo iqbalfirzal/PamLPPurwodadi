@@ -158,6 +158,7 @@ public class Welcome extends AppCompatActivity {
 
             JSONObject extraData = new JSONObject();
             extraData.put("senderid",nip);
+            extraData.put("messagetype","emergency");
             extraData.put("sendername",nama);
             extraData.put("senderregu",regu);
             extraData.put("senderphoto",foto);

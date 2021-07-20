@@ -40,6 +40,7 @@ public class ThisAppFirebaseMessagingService extends FirebaseMessagingService {
 
         Map<String, String> extraData = remoteMessage.getData();
         String senderid = extraData.get("senderid");
+        String messagetype = extraData.get("messagetype");
         String sendername = extraData.get("sendername");
         String senderregu = extraData.get("senderregu");
         String senderphoto = extraData.get("senderphoto");
@@ -53,8 +54,8 @@ public class ThisAppFirebaseMessagingService extends FirebaseMessagingService {
                         .setContentText(body)
                         .setSmallIcon(R.drawable.ic_warning)
                         .setColor(rgb(255, 0, 0));
-        assert senderid != null;
-        if(!senderid.equals(iduser)) {
+        assert senderid != null; assert messagetype != null;
+        if(!senderid.equals(iduser)&&messagetype.equals("emergency")) {
             Intent intent;
             intent = new Intent(this, ShowEmergencyCall.class);
             intent.putExtra("notifSenderId", senderid);
