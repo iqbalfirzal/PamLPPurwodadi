@@ -229,7 +229,7 @@ public class MainActivity2 extends AppCompatActivity {
                             }
                         }).addOnFailureListener(e -> Toast.makeText(MainActivity2.this, "Gagal membaca data lokasi. Mohon periksa koneksi.", Toast.LENGTH_LONG).show());
                     }else {
-                        Toast.makeText(MainActivity2.this, "Tidak dapat menemukan lokasi, coba lagi.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity2.this, "Gagal. Coba kalibrasi GPS dengan aplikasi Maps, lalu ulangi proses ini.", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
