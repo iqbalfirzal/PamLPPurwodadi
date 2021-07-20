@@ -294,6 +294,7 @@ public class MainActivity3 extends AppCompatActivity {
     private void sendNotifLapsus(){
         JSONObject json = new JSONObject();
         try {
+            String nip = new PrefManager(this).getNip();
             String nama = namapelapor.getText().toString();
             String pesan = isilaporan.getText().toString();
 
@@ -303,6 +304,7 @@ public class MainActivity3 extends AppCompatActivity {
             notificationObj.put("body", pesan);
 
             JSONObject extraData = new JSONObject();
+            extraData.put("senderid",nip);
             extraData.put("messagetype","lapsus");
             extraData.put("sendername",nama);
             extraData.put("message",pesan);
