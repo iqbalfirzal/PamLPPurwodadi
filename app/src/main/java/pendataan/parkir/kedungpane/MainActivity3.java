@@ -280,6 +280,7 @@ public class MainActivity3 extends AppCompatActivity {
         Map<String, Object> docData = new HashMap<>();
         docData.put("isilaporan", String.valueOf(isilaporan.getText()));
         docData.put("namapelapor", String.valueOf(namapelapor.getText()));
+        docData.put("nippelapor", new PrefManager(this).getNip());
         docData.put("foto", foto);
         docData.put("geo", lokasilaporankhusus);
         docData.put("instruksipim", "");
@@ -287,16 +288,17 @@ public class MainActivity3 extends AppCompatActivity {
         db.collection("lapsus")
                 .document().set(docData)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(MainActivity3.this,"Data berhasil disimpan.",Toast.LENGTH_LONG).show();sendNotifLapsus();
+                    Toast.makeText(MainActivity3.this,"Data berhasil disimpan.",Toast.LENGTH_LONG).show();sendNotifLapsus(foto);
                 }).addOnFailureListener(e -> Toast.makeText(MainActivity3.this,"Gagal menambahkan data! Periksa koneksi.",Toast.LENGTH_LONG).show());
     }
 
-    private void sendNotifLapsus(){
+    private void sendNotifLapsus(String foto){
         JSONObject json = new JSONObject();
         try {
             String nip = new PrefManager(this).getNip();
             String nama = namapelapor.getText().toString();
             String pesan = isilaporan.getText().toString();
+            double lati = lokasilaporankhusus.getLatitude();double longit = lokasilaporankhusus.getLongitude();
 
             json.put("to","/topics/"+"umjoL1srorNjDvpmeocBJ1kN7pVTb4t9zgmsPCHIs");
             JSONObject notificationObj = new JSONObject();
@@ -304,17 +306,22 @@ public class MainActivity3 extends AppCompatActivity {
             notificationObj.put("body", pesan);
 
             JSONObject extraData = new JSONObject();
-            extraData.put("senderid",nip);
+            extraData.put("senderid", nip);
             extraData.put("messagetype","lapsus");
-            extraData.put("sendername",nama);
-            extraData.put("message",pesan);
+            extraData.put("isilaporan", pesan);
+            extraData.put("namapelapor", nama);
+            extraData.put("foto", foto);
+            extraData.put("senderlocation_lat", lati);
+            extraData.put("senderlocation_longi", longit);
+            extraData.put("instruksipim", "");
+            extraData.put("tgllaporan", formatTanggal(new Date()));
 
             json.put("notification",notificationObj);
             json.put("data",extraData);
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SENDNOTIFURL,
                     json,
-                    response -> finish(), error -> Log.d("MUR", "onError: "+error.networkResponse)
+                    response -> finish(), error -> Log.d("LAPSUS SEND NOTIF ERROR", "onError: "+error.networkResponse)
             ){
                 @Override
                 public Map<String, String> getHeaders() {
@@ -354,6 +361,11 @@ public class MainActivity3 extends AppCompatActivity {
         adapter = new ListLapsusAdapter(options,this );
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+    }
+
+    private String formatTanggal(Date tanggal){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatTanggal = new SimpleDateFormat("EEEE, dd MMMM yyy");
+        return formatTanggal.format(tanggal);
     }
 
     @Override

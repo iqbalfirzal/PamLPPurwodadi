@@ -229,7 +229,7 @@ public class MainActivity2 extends AppCompatActivity {
                             }
                         }).addOnFailureListener(e -> Toast.makeText(MainActivity2.this, "Gagal membaca data lokasi. Mohon periksa koneksi.", Toast.LENGTH_LONG).show());
                     }else {
-                        Toast.makeText(MainActivity2.this, "Gagal. Coba kalibrasi GPS dengan aplikasi Maps, lalu ulangi proses ini.", Toast.LENGTH_SHORT).show();
+                        showDialogGagalGPS();
                     }
                 });
             }
@@ -312,6 +312,15 @@ public class MainActivity2 extends AppCompatActivity {
                     namapetugas.setText("");takenPhotoPath = null;datafotopetugas = null;progressDialog.dismiss();
                     Toast.makeText(MainActivity2.this,"Laporan terkirim.",Toast.LENGTH_LONG).show();finish();
                 }).addOnFailureListener(e -> Toast.makeText(MainActivity2.this,"Gagal menambahkan data! Periksa koneksi.",Toast.LENGTH_LONG).show());
+    }
+
+    private void showDialogGagalGPS(){
+        final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(MainActivity2.this);
+        builder.setTitle("Gagal Mendapatkan Lokasi");
+        builder.setMessage("Coba Kalibrasi GPS dengan aplikasi Google Maps, lalu ulangi proses ini.");
+        builder.setCancelable(true);
+        builder.setPositiveButton("Oke", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 
 }

@@ -82,6 +82,7 @@
                         android:singleLine="true"
                         android:text=""
                         android:textColor="#000000"
+                        android:enabled="false"
                         android:theme="@style/EditTextTheme" />
 
                     <EditText

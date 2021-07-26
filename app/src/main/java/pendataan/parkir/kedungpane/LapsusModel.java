@@ -13,19 +13,21 @@ public class LapsusModel {
     private String instruksipim;
     private String isilaporan;
     private String namapelapor;
+    private String nippelapor;
     private Date tgllaporan;
 
 
     public LapsusModel() {
     }
 
-    public LapsusModel(String documentId, String foto, GeoPoint geo, String isilaporan, String instruksipim, String namapelapor, Date tgllaporan) {
+    public LapsusModel(String documentId, String foto, GeoPoint geo, String isilaporan, String instruksipim, String namapelapor, String nippelapor, Date tgllaporan) {
         this.documentId = documentId;
         this.foto = foto;
         this.geo = geo;
         this.instruksipim = instruksipim;
         this.isilaporan = isilaporan;
         this.namapelapor = namapelapor;
+        this.nippelapor = nippelapor;
         this.tgllaporan = tgllaporan;
     }
 
@@ -51,6 +53,10 @@ public class LapsusModel {
 
     public String getNamaPelapor() {
         return namapelapor;
+    }
+
+    public String getNipPelapor() {
+        return nippelapor;
     }
 
     public Date getTglLaporan() {

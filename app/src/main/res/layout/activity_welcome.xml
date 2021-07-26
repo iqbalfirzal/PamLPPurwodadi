@@ -11,7 +11,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
 
         <View
             android:layout_width="match_parent"
@@ -68,7 +69,8 @@
             app:layout_constraintBottom_toTopOf="@+id/welcomemainbody2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            android:animateLayoutChanges="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,7 +81,8 @@
                 android:orientation="horizontal"
                 android:weightSum="2"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="20dp">
+                android:layout_marginVertical="20dp"
+                android:animateLayoutChanges="true">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -113,7 +116,8 @@
                     android:layout_marginStart="10dp"
                     android:orientation="vertical"
                     android:layout_gravity="top"
-                    android:layout_weight="0.7">
+                    android:layout_weight="0.7"
+                    android:animateLayoutChanges="true">
 
                     <TextView
                         android:layout_width="match_parent"
@@ -129,7 +133,7 @@
                         android:layout_marginTop="5dp"
                         android:nestedScrollingEnabled="true"
                         android:textIsSelectable="true"
-                        android:text="Disini nantinya akan berisi instruksi pimpinan kepada seluruh petugas"/>
+                        android:text="-" />
 
                 </LinearLayout>
 

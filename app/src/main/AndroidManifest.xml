@@ -23,7 +23,7 @@
         android:roundIcon="@drawable/ic_shield"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkirLPKedungpane">
-        <activity android:name=".ShowEmergencyCall"></activity>
+        <activity android:name=".ShowEmergencyCall"/>
         <activity
             android:name=".ChangePin"
             android:windowSoftInputMode="adjustPan" />

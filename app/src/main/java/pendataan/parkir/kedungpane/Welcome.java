@@ -11,7 +11,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -31,7 +30,6 @@ import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
@@ -44,7 +42,6 @@ import java.util.Objects;
 
 public class Welcome extends AppCompatActivity {
     private FirebaseAuth auth;
-    private FirebaseFirestore db;
     private RequestQueue mRequestQue;
     private final String SENDNOTIFURL = "https://fcm.googleapis.com/fcm/send";
     private static final int REQUEST_FINE_LOCATION_CODE = 1111;
@@ -59,7 +56,7 @@ public class Welcome extends AppCompatActivity {
         FirebaseMessaging.getInstance().subscribeToTopic("umjoL1srorNjDvpmeocBJ1kN7pVTb4t9zgmsPCHIs");
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
         TextView intruksipim = findViewById(R.id.instruksipim);
         DocumentReference isiinstruksi = db.collection("instruksipimpinan").document("untukpam");
         isiinstruksi.get().addOnSuccessListener(ds -> {
@@ -70,9 +67,7 @@ public class Welcome extends AppCompatActivity {
             } else {
                 intruksipim.setText("[ KALAPAS ] -\n\n[ KPLP ] -");
             }
-        }).addOnFailureListener(e -> {
-            Toast.makeText(Welcome.this, "Gagal memuat instruksi pimpinan. Periksa koneksi Anda.", Toast.LENGTH_LONG).show();
-        });
+        }).addOnFailureListener(e -> Toast.makeText(Welcome.this, "Gagal memuat instruksi pimpinan. Periksa koneksi Anda.", Toast.LENGTH_LONG).show());
         mRequestQue = Volley.newRequestQueue(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         ImageButton btnlogout = findViewById(R.id.btn_logout);
@@ -155,7 +150,7 @@ public class Welcome extends AppCompatActivity {
                     builder.setNegativeButton("Batal", (dialog, which) -> dialog.dismiss());
                     builder.show();
                 }else {
-                    Toast.makeText(Welcome.this, "Gagal. Coba kalibrasi GPS dengan aplikasi Maps, lalu ulangi proses ini.", Toast.LENGTH_SHORT).show();
+                    showDialogGagalGPS();
                 }
             });
         }
@@ -215,6 +210,15 @@ public class Welcome extends AppCompatActivity {
             builder.setCancelable(false);
             builder.setPositiveButton("Oke", (dialog, which) -> dialog.dismiss());
             builder.show();
+    }
+
+    private void showDialogGagalGPS(){
+        final androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(Welcome.this);
+        builder.setTitle("Gagal Mendapatkan Lokasi");
+        builder.setMessage("Coba Kalibrasi GPS dengan aplikasi Google Maps, lalu ulangi proses ini.");
+        builder.setCancelable(true);
+        builder.setPositiveButton("Oke", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 
     private void showDialogDalamPengembangan(){

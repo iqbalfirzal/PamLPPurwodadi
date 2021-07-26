@@ -34,6 +34,7 @@ public class ThisAppFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
+        Intent intent;
 
         String title = Objects.requireNonNull(remoteMessage.getNotification()).getTitle();
         String body = remoteMessage.getNotification().getBody();
@@ -55,8 +56,7 @@ public class ThisAppFirebaseMessagingService extends FirebaseMessagingService {
                         .setSmallIcon(R.drawable.ic_warning)
                         .setColor(rgb(255, 0, 0));
         assert senderid != null; assert messagetype != null;
-        if(!senderid.equals(iduser)&&messagetype.equals("emergency")) {
-            Intent intent;
+        if(senderid.equals(iduser)&&messagetype.equals("emergency")) {
             intent = new Intent(this, ShowEmergencyCall.class);
             intent.putExtra("notifSenderId", senderid);
             intent.putExtra("notifSenderName", sendername);
@@ -64,6 +64,17 @@ public class ThisAppFirebaseMessagingService extends FirebaseMessagingService {
             intent.putExtra("notifSenderPhoto", senderphoto);
             intent.putExtra("notifSenderLocaton_lat", senderlocationlat);
             intent.putExtra("notifSenderLocaton_longi", senderlocationlongi);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            notificationBuilder.setContentIntent(pendingIntent);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            int id =  (int) System.currentTimeMillis();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                @SuppressLint("WrongConstant") NotificationChannel channel = new NotificationChannel("PLPSmgApp","emergencycallnotif",NotificationManager.IMPORTANCE_MAX);
+                notificationManager.createNotificationChannel(channel);
+            }
+            notificationManager.notify(id,notificationBuilder.build());
+        }else if(senderid.equals(iduser)&&messagetype.equals("lapsus")){
+            intent = new Intent(this, MainActivity3.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             notificationBuilder.setContentIntent(pendingIntent);
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
