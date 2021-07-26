@@ -69,6 +69,18 @@ public class PrefManager {
         return isEmailEmpty || isPasswordEmpty;
     }
 
+    void saveInstruksiPim(String isi) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("InstruksiPim", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("isi", isi);
+        editor.apply();
+    }
+
+    String getInstruksiPim() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("InstruksiPim", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("isi", "[ KALAPAS ] -\n\n[ KPLP ] -");
+    }
+
     void clearData() {
         SharedPreferences datalogin = context.getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
         SharedPreferences.Editor editordatalogin = datalogin.edit();

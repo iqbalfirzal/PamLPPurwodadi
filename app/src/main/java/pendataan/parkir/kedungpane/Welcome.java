@@ -58,14 +58,16 @@ public class Welcome extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         TextView intruksipim = findViewById(R.id.instruksipim);
+        intruksipim.setText(new PrefManager(this).getInstruksiPim());
         DocumentReference isiinstruksi = db.collection("instruksipimpinan").document("untukpam");
         isiinstruksi.get().addOnSuccessListener(ds -> {
             if (!Objects.equals(ds.get("kalapas"), "")) {
                 String ikalapas =  Objects.requireNonNull(ds.get("kalapas")).toString();
                 String ikplp = Objects.requireNonNull(ds.get("kplp")).toString();
                 intruksipim.setText("[ KALAPAS ] "+ikalapas+"\n\n[ KPLP ] "+ikplp);
+                new PrefManager(this).saveInstruksiPim("[ KALAPAS ] "+ikalapas+"\n\n[ KPLP ] "+ikplp);
             } else {
-                intruksipim.setText("[ KALAPAS ] -\n\n[ KPLP ] -");
+                intruksipim.setText(new PrefManager(this).getInstruksiPim());
             }
         }).addOnFailureListener(e -> Toast.makeText(Welcome.this, "Gagal memuat instruksi pimpinan. Periksa koneksi Anda.", Toast.LENGTH_LONG).show());
         mRequestQue = Volley.newRequestQueue(this);
