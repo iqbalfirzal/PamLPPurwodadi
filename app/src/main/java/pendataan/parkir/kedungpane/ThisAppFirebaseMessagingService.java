@@ -56,7 +56,7 @@ public class ThisAppFirebaseMessagingService extends FirebaseMessagingService {
                         .setSmallIcon(R.drawable.ic_warning)
                         .setColor(rgb(255, 0, 0));
         assert senderid != null; assert messagetype != null;
-        if(senderid.equals(iduser)&&messagetype.equals("emergency")) {
+        if(!senderid.equals(iduser)&&messagetype.equals("emergency")) {
             intent = new Intent(this, ShowEmergencyCall.class);
             intent.putExtra("notifSenderId", senderid);
             intent.putExtra("notifSenderName", sendername);
