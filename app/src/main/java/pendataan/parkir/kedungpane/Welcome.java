@@ -185,7 +185,7 @@ public class Welcome extends AppCompatActivity {
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SENDNOTIFURL,
                     json,
-                    response -> showSentECDialog(), error -> Log.d("MUR", "onError: "+error.networkResponse)
+                    response -> showSentECDialog(), error -> Log.d("EMERGENCY NOTIF ERROR", "onError: "+error.networkResponse)
             ){
                 @Override
                 public Map<String, String> getHeaders() {

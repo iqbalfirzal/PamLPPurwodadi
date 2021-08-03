@@ -47,10 +47,13 @@ public class ThisAppFirebaseMessagingService extends FirebaseMessagingService {
         String senderphoto = extraData.get("senderphoto");
         String senderlocationlat = extraData.get("senderlocation_lat");
         String senderlocationlongi = extraData.get("senderlocation_longi");
+        String sendTo = extraData.get("sendto");
         String iduser = new PrefManager(this).getNip();
 
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, "PLPSmgApp")
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        .setCategory(NotificationCompat.CATEGORY_CALL)
                         .setContentTitle(title)
                         .setContentText(body)
                         .setSmallIcon(R.drawable.ic_warning)
@@ -73,7 +76,7 @@ public class ThisAppFirebaseMessagingService extends FirebaseMessagingService {
                 notificationManager.createNotificationChannel(channel);
             }
             notificationManager.notify(id,notificationBuilder.build());
-        }else if(senderid.equals(iduser)&&messagetype.equals("lapsus")){
+        }else if(messagetype.equals("lapsus")&&Objects.equals(sendTo, iduser)){
             intent = new Intent(this, MainActivity3.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             notificationBuilder.setContentIntent(pendingIntent);

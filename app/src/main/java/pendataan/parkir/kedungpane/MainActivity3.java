@@ -41,6 +41,7 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.Query;
@@ -285,14 +286,15 @@ public class MainActivity3 extends AppCompatActivity {
         docData.put("geo", lokasilaporankhusus);
         docData.put("instruksipim", "");
         docData.put("tgllaporan", new Date());
-        db.collection("lapsus")
-                .document().set(docData)
+        DocumentReference ref = db.collection("lapsus").document();
+        String refId = ref.getId();
+        ref.set(docData)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(MainActivity3.this,"Data berhasil disimpan.",Toast.LENGTH_LONG).show();sendNotifLapsus(foto);
+                    Toast.makeText(MainActivity3.this,"Data berhasil disimpan.",Toast.LENGTH_LONG).show();sendNotifLapsus(foto, refId);
                 }).addOnFailureListener(e -> Toast.makeText(MainActivity3.this,"Gagal menambahkan data! Periksa koneksi.",Toast.LENGTH_LONG).show());
     }
 
-    private void sendNotifLapsus(String foto){
+    private void sendNotifLapsus(String foto, String id){
         JSONObject json = new JSONObject();
         try {
             String nip = new PrefManager(this).getNip();
@@ -306,6 +308,7 @@ public class MainActivity3 extends AppCompatActivity {
             notificationObj.put("body", pesan);
 
             JSONObject extraData = new JSONObject();
+            extraData.put("docId", id);
             extraData.put("senderid", nip);
             extraData.put("messagetype","lapsus");
             extraData.put("isilaporan", pesan);
@@ -333,12 +336,9 @@ public class MainActivity3 extends AppCompatActivity {
             };
             mRequestQue.add(request);
         }
-        catch (JSONException e)
-
-        {
+        catch (JSONException e) {
             e.printStackTrace();
         }
-
     }
 
     private void setUpRecyclerView(){
