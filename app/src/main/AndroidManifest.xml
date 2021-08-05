@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="pendataan.parkir.kedungpane">
 
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -23,7 +25,12 @@
         android:roundIcon="@drawable/ic_shield"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkirLPKedungpane">
-        <activity android:name=".ShowEmergencyCall"/>
+        <activity android:name=".ShowEmergencyCall">
+            <intent-filter>
+                <action android:name="BUKA_ACTIVITY_EMERGENCY"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ChangePin"
             android:windowSoftInputMode="adjustPan" />
@@ -41,7 +48,12 @@
         </activity>
         <activity
             android:name=".MainActivity3"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="BUKA_ACTIVITY_LAPSUS"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity>
         <activity
             android:name=".MainActivity2"
             android:windowSoftInputMode="adjustPan" />

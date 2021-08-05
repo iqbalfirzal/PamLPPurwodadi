@@ -25,13 +25,13 @@ public class ShowEmergencyCall extends AppCompatActivity {
         TextView regu = findViewById(R.id.showregunya);
         CircularImageView foto = findViewById(R.id.showfotonya);
         Button openmap = findViewById(R.id.btn_openmap);
-        if (getIntent().hasExtra("notifSenderId")){
-            String senderid = getIntent().getStringExtra("notifSenderId");
-            String sendername = getIntent().getStringExtra("notifSenderName");
-            String senderregu = getIntent().getStringExtra("notifSenderRegu");
-            String senderphoto = getIntent().getStringExtra("notifSenderPhoto");
-            String senderlocationlat = getIntent().getStringExtra("notifSenderLocaton_lat");
-            String senderlocationlongi = getIntent().getStringExtra("notifSenderLocaton_longi");
+        if (getIntent().hasExtra("senderid")){
+            String senderid = getIntent().getStringExtra("senderid");
+            String sendername = getIntent().getStringExtra("sendername");
+            String senderregu = getIntent().getStringExtra("senderregu");
+            String senderphoto = getIntent().getStringExtra("senderphoto");
+            String senderlocationlat = getIntent().getStringExtra("senderlocation_lat");
+            String senderlocationlongi = getIntent().getStringExtra("senderlocation_longi");
             Glide.with(this)
                     .load(senderphoto)
                     .placeholder(R.drawable.ic_account)

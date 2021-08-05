@@ -10,7 +10,6 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -59,16 +58,16 @@ public class ThisAppFirebaseMessagingService extends FirebaseMessagingService {
                         .setSmallIcon(R.drawable.ic_warning)
                         .setColor(rgb(255, 0, 0));
         assert senderid != null; assert messagetype != null;
-        if(!senderid.equals(iduser)&&messagetype.equals("emergency")) {
+        if(messagetype.equals("emergency")&&!senderid.equals(iduser)) {
             intent = new Intent(this, ShowEmergencyCall.class);
-            intent.putExtra("notifSenderId", senderid);
-            intent.putExtra("notifSenderName", sendername);
-            intent.putExtra("notifSenderRegu", senderregu);
-            intent.putExtra("notifSenderPhoto", senderphoto);
-            intent.putExtra("notifSenderLocaton_lat", senderlocationlat);
-            intent.putExtra("notifSenderLocaton_longi", senderlocationlongi);
+            intent.putExtra("senderid", senderid);
+            intent.putExtra("sendername", sendername);
+            intent.putExtra("senderregu", senderregu);
+            intent.putExtra("senderphoto", senderphoto);
+            intent.putExtra("senderlocation_lat", senderlocationlat);
+            intent.putExtra("senderlocation_longi", senderlocationlongi);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            notificationBuilder.setContentIntent(pendingIntent);
+            notificationBuilder.setFullScreenIntent(pendingIntent,true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             int id =  (int) System.currentTimeMillis();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
@@ -79,7 +78,7 @@ public class ThisAppFirebaseMessagingService extends FirebaseMessagingService {
         }else if(messagetype.equals("lapsus")&&Objects.equals(sendTo, iduser)){
             intent = new Intent(this, MainActivity3.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-            notificationBuilder.setContentIntent(pendingIntent);
+            notificationBuilder.setFullScreenIntent(pendingIntent,true);
             NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             int id =  (int) System.currentTimeMillis();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){

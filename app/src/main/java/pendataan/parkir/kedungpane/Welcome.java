@@ -170,6 +170,7 @@ public class Welcome extends AppCompatActivity {
             JSONObject notificationObj = new JSONObject();
             notificationObj.put("title", "Laporan Masuk !");
             notificationObj.put("body", "PERINGATAM KEADAAN DARURAT OLEH "+nama.toUpperCase());
+            notificationObj.put("click_action", "BUKA_ACTIVITY_EMERGENCY");
 
             JSONObject extraData = new JSONObject();
             extraData.put("senderid",nip);
@@ -182,6 +183,8 @@ public class Welcome extends AppCompatActivity {
 
             json.put("notification",notificationObj);
             json.put("data",extraData);
+
+            Log.i("TESI",nip);
 
             JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, SENDNOTIFURL,
                     json,

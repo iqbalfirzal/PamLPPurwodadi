@@ -306,6 +306,7 @@ public class MainActivity3 extends AppCompatActivity {
             JSONObject notificationObj = new JSONObject();
             notificationObj.put("title", "Laporan Khusus Masuk Oleh : "+nama);
             notificationObj.put("body", pesan);
+            notificationObj.put("click_action", "BUKA_ACTIVITY_LAPSUS");
 
             JSONObject extraData = new JSONObject();
             extraData.put("docId", id);
