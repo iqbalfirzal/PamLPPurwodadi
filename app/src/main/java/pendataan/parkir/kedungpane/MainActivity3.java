@@ -12,7 +12,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -25,6 +24,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -81,7 +83,6 @@ public class MainActivity3 extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 1011;
     private static final int REQUEST_FINE_LOCATION_CODE = 1111;
     private static final int REQUEST_COARSE_LOCATION_CODE = 1101;
-    private static final int TAKE_CAMERA_FOTO = 10;
     LocationManager locationManager;
     private GeoPoint lokasilaporankhusus;
     private ListLapsusAdapter adapter;
@@ -216,21 +217,29 @@ public class MainActivity3 extends AppCompatActivity {
 
     @SuppressLint("QueryPermissionsNeeded")
     private void pickFoto() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            try {
-                File photoFile = createImageFile();
-                Uri photoURI = FileProvider.getUriForFile(this, this.getPackageName()+".camprovider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, TAKE_CAMERA_FOTO);
-            } catch (Exception ex) {
-                Toast.makeText(getApplication(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }else
-        {
-            Toast.makeText(getApplication(), "Foto kosong.", Toast.LENGTH_SHORT).show();
+        try {
+            File photoFile = createImageFile();
+            Uri photoURI = FileProvider.getUriForFile(this, this.getPackageName()+".camprovider", photoFile);
+            takePictureLapsus.launch(photoURI);
+        } catch (Exception ex) {
+            Toast.makeText(getApplication(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
+    ActivityResultLauncher<Uri> takePictureLapsus = registerForActivityResult(
+            new ActivityResultContracts.TakePicture(),
+            new ActivityResultCallback<Boolean>() {
+                @Override
+                public void onActivityResult(Boolean result) {
+                    if(result){
+                        compresseddatafotolaporan = Uri.fromFile(Compressor.getDefault(getApplicationContext()).compressToFile(new File(takenPhotoPath)));
+                        datafotolaporan = Uri.fromFile(new File(takenPhotoPath));
+                        fotolaporan.setImageURI(datafotolaporan);
+                    }else{
+                        Toast.makeText(getApplication(), "Gagal mengambil gambar.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
     private File createImageFile() throws IOException {
         String randomName = GenerateRandomValue.getId(5);
@@ -238,17 +247,6 @@ public class MainActivity3 extends AppCompatActivity {
         File image = File.createTempFile(randomName,".jpg", storageDir);
         takenPhotoPath = image.getAbsolutePath();
         return image;
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        if(requestCode == TAKE_CAMERA_FOTO) {
-            if(resultCode == RESULT_OK){
-                compresseddatafotolaporan = Uri.fromFile(Compressor.getDefault(this).compressToFile(new File(takenPhotoPath)));
-                datafotolaporan = Uri.fromFile(new File(takenPhotoPath));
-                fotolaporan.setImageURI(datafotolaporan);
-            }
-        }
     }
 
     private void uploadFoto(){
@@ -373,6 +371,12 @@ public class MainActivity3 extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         adapter.startListening();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
     }
 
     @Override

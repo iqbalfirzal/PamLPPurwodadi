@@ -1,10 +1,5 @@
 package pendataan.parkir.kedungpane;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -14,7 +9,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +20,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -56,7 +58,6 @@ public class AddParkir extends AppCompatActivity {
     private String takenPhotoPath = null;
     private static final int STORAGE_PERMISSION_CODE = 1010;
     private static final int CAMERA_PERMISSION_CODE = 1011;
-    private static final int TAKE_CAMERA_FOTO = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,19 +148,12 @@ public class AddParkir extends AppCompatActivity {
 
     @SuppressLint("QueryPermissionsNeeded")
     private void pickFoto() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            try {
-                File photoFile = createImageFile();
-                Uri photoURI = FileProvider.getUriForFile(this, this.getPackageName()+".camprovider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, TAKE_CAMERA_FOTO);
-            } catch (Exception ex) {
-                Toast.makeText(getApplication(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }else
-        {
-            Toast.makeText(getApplication(), "Foto kosong.", Toast.LENGTH_SHORT).show();
+        try {
+            File photoFile = createImageFile();
+            Uri photoURI = FileProvider.getUriForFile(this, this.getPackageName()+".camprovider", photoFile);
+            takePictureParkir.launch(photoURI);
+        } catch (Exception ex) {
+            Toast.makeText(getApplication(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -171,16 +165,20 @@ public class AddParkir extends AppCompatActivity {
         return image;
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
-        super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        if(requestCode == TAKE_CAMERA_FOTO) {
-            if(resultCode == RESULT_OK){
-                compresseddatafotokendaraan = Uri.fromFile(Compressor.getDefault(this).compressToFile(new File(takenPhotoPath)));
-                datafotokendaraan = Uri.fromFile(new File(takenPhotoPath));
-                fotokendaraan.setImageURI(datafotokendaraan);
-            }
-        }
-    }
+    ActivityResultLauncher<Uri> takePictureParkir = registerForActivityResult(
+            new ActivityResultContracts.TakePicture(),
+            new ActivityResultCallback<Boolean>() {
+                @Override
+                public void onActivityResult(Boolean result) {
+                    if(result){
+                        compresseddatafotokendaraan = Uri.fromFile(Compressor.getDefault(getApplicationContext()).compressToFile(new File(takenPhotoPath)));
+                        datafotokendaraan = Uri.fromFile(new File(takenPhotoPath));
+                        fotokendaraan.setImageURI(datafotokendaraan);
+                    }else{
+                        Toast.makeText(getApplication(), "Gagal mengambil gambar.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
     private void uploadFoto(){
         final StorageReference lokasifoto = folderstorage.child("fotowasrik").child("traffic").child(plat.getText().toString()+"_"+datafotokendaraan.getLastPathSegment());

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,6 @@ import java.util.Objects;
 public class ListLapsusAdapter extends FirestoreRecyclerAdapter<LapsusModel, ListLapsusAdapter.ListLapsusHolder> {
     private final Context context;
     private final RecyclerView recyclerView;
-    private ProgressDialog progressDialog;
 
     public ListLapsusAdapter(@NonNull FirestoreRecyclerOptions<LapsusModel> options, Context context) {
         super(options);
@@ -39,9 +39,10 @@ public class ListLapsusAdapter extends FirestoreRecyclerAdapter<LapsusModel, Lis
         holder.namapelapor.setText("Pelapor : "+model.getNamaPelapor());
         holder.tanggallaporan.setText("Tanggal   : "+formatTanggal(model.getTglLaporan()));
         holder.isilaporan.setText(model.getIsiLaporan());
+        Log.i("TESI", model.getInstruksiPim());
         if(model.getInstruksiPim().equals("")){
             holder.instruksi.setText("-");
-        }else {
+        }else{
             holder.instruksi.setText(model.getInstruksiPim());
         }
     }
@@ -64,6 +65,7 @@ public class ListLapsusAdapter extends FirestoreRecyclerAdapter<LapsusModel, Lis
             tanggallaporan = itemView.findViewById(R.id.tanggallaporan);
             isilaporan = itemView.findViewById(R.id.isilaporan);
             instruksi = itemView.findViewById(R.id.instruksi);
+            recyclerView.scrollToPosition(0);
         }
     }
 

@@ -11,7 +11,6 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
@@ -21,6 +20,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -61,7 +63,6 @@ public class MainActivity2 extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 1011;
     private static final int REQUEST_FINE_LOCATION_CODE = 1111;
     private static final int REQUEST_COARSE_LOCATION_CODE = 1101;
-    private static final int TAKE_CAMERA_FOTO = 10;
     LocationManager locationManager;
 
     @SuppressLint("SetTextI18n")
@@ -143,20 +144,29 @@ public class MainActivity2 extends AppCompatActivity {
 
     @SuppressLint("QueryPermissionsNeeded")
     private void pickFoto() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            try {
-                File photoFile = createImageFile();
-                Uri photoURI = FileProvider.getUriForFile(this, this.getPackageName()+".camprovider", photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(takePictureIntent, TAKE_CAMERA_FOTO);
-            } catch (Exception ex) {
-                Toast.makeText(getApplication(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        }else {
-            Toast.makeText(getApplication(), "Foto kosong.", Toast.LENGTH_SHORT).show();
+        try {
+            File photoFile = createImageFile();
+            Uri photoURI = FileProvider.getUriForFile(this, this.getPackageName()+".camprovider", photoFile);
+            takePictureControl.launch(photoURI);
+        } catch (Exception ex) {
+            Toast.makeText(getApplication(), ex.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
+    ActivityResultLauncher<Uri> takePictureControl = registerForActivityResult(
+            new ActivityResultContracts.TakePicture(),
+            new ActivityResultCallback<Boolean>() {
+                @Override
+                public void onActivityResult(Boolean result) {
+                    if(result){
+                        compresseddatafotopetugas = Uri.fromFile(Compressor.getDefault(getApplicationContext()).compressToFile(new File(takenPhotoPath)));
+                        datafotopetugas = Uri.fromFile(new File(takenPhotoPath));
+                        fotopetugas.setImageURI(datafotopetugas);
+                    }else{
+                        Toast.makeText(getApplication(), "Gagal mengambil gambar.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
     private File createImageFile() throws IOException {
         String randomName = GenerateRandomValue.getId(5);
@@ -176,15 +186,6 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == TAKE_CAMERA_FOTO) {
-            if(resultCode == RESULT_OK){
-                compresseddatafotopetugas = Uri.fromFile(Compressor.getDefault(this).compressToFile(new File(takenPhotoPath)));
-                datafotopetugas = Uri.fromFile(new File(takenPhotoPath));
-                fotopetugas.setImageURI(datafotopetugas);
-            }else {
-                super.onActivityResult(requestCode, resultCode, data);
-            }
-        }else{
             IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (intentResult != null) {
                 if (intentResult.getContents() == null) {
@@ -203,7 +204,6 @@ public class MainActivity2 extends AppCompatActivity {
             } else {
                 super.onActivityResult(requestCode, resultCode, data);
             }
-        }
     }
 
     private void dapatkanLokasidanData(String namalp, String namacekpoin){
