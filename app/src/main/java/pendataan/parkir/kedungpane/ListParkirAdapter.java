@@ -94,7 +94,7 @@ public class ListParkirAdapter extends FirestoreRecyclerAdapter<ParkirModel, Lis
     }
 
     private String formatJam(Date tanggal){
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatTanggal = new SimpleDateFormat("HH:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat formatTanggal = new SimpleDateFormat("HH:mm:ss | dd/MM/yyyy");
         return formatTanggal.format(tanggal);
     }
 }

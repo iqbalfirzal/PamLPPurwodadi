@@ -222,7 +222,7 @@ public class MainActivity2 extends AppCompatActivity {
                         lokasigeopos.get().addOnSuccessListener(ds -> {
                             double lat2 = Objects.requireNonNull(ds.getGeoPoint("geo")).getLatitude();
                             double longi2 = Objects.requireNonNull(ds.getGeoPoint("geo")).getLongitude();
-                            if(selisihJarak(lat,longi,lat2,longi2) < 0.09){
+                            if(selisihJarak(lat,longi,lat2,longi2) < 0.00699){
                                 confirmKirimData(namacekpoin,lat,longi);
                             }else{
                                 Toast.makeText(MainActivity2.this,"LAPORAN GAGAL. Anda tidak berada di titik pos kontrol : "+namacekpoin,Toast.LENGTH_LONG).show();
