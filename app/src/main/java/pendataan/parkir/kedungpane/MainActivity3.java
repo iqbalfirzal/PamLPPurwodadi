@@ -276,11 +276,14 @@ public class MainActivity3 extends AppCompatActivity {
     }
 
     private void kirimData(String foto){
+        String fotopelapor = new PrefManager(this).getFoto();
+        String nippelapor = new PrefManager(this).getNip();
         Map<String, Object> docData = new HashMap<>();
         docData.put("isilaporan", String.valueOf(isilaporan.getText()));
         docData.put("namapelapor", String.valueOf(namapelapor.getText()));
-        docData.put("nippelapor", new PrefManager(this).getNip());
+        docData.put("nippelapor", nippelapor);
         docData.put("foto", foto);
+        docData.put("fotopelapor", fotopelapor);
         docData.put("geo", lokasilaporankhusus);
         docData.put("instruksipim", "");
         docData.put("tgllaporan", new Date());
@@ -288,11 +291,11 @@ public class MainActivity3 extends AppCompatActivity {
         String refId = ref.getId();
         ref.set(docData)
                 .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(MainActivity3.this,"Data berhasil disimpan.",Toast.LENGTH_LONG).show();sendNotifLapsus(foto, refId);
+                    Toast.makeText(MainActivity3.this,"Data berhasil disimpan.",Toast.LENGTH_LONG).show();sendNotifLapsus(foto, refId, fotopelapor);
                 }).addOnFailureListener(e -> Toast.makeText(MainActivity3.this,"Gagal menambahkan data! Periksa koneksi.",Toast.LENGTH_LONG).show());
     }
 
-    private void sendNotifLapsus(String foto, String id){
+    private void sendNotifLapsus(String foto, String id, String fotopelapor){
         JSONObject json = new JSONObject();
         try {
             String nip = new PrefManager(this).getNip();
@@ -313,6 +316,7 @@ public class MainActivity3 extends AppCompatActivity {
             extraData.put("isilaporan", pesan);
             extraData.put("namapelapor", nama);
             extraData.put("foto", foto);
+            extraData.put("fotopelapor", fotopelapor);
             extraData.put("senderlocation_lat", lati);
             extraData.put("senderlocation_longi", longit);
             extraData.put("instruksipim", "");

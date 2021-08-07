@@ -21,6 +21,9 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -162,19 +165,12 @@ public class ChangePin extends AppCompatActivity {
         builder.setItems(options, (dialog, item) -> {
             if (options[item].equals("Kamera"))
             {
-                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                    try {
-                        photoFile = createImageFile();
-                        Uri photoURI = FileProvider.getUriForFile(this, this.getPackageName()+".camprovider", photoFile);
-                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                        startActivityForResult(takePictureIntent, TAKE_CAMERA_FOTO_AKUN);
-                    } catch (Exception ex) {
-                        Toast.makeText(getApplication(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }else
-                {
-                    Toast.makeText(getApplication(), "Foto kosong.", Toast.LENGTH_SHORT).show();
+                try {
+                    File photoFile = createImageFile();
+                    Uri photoURI = FileProvider.getUriForFile(this, this.getPackageName()+".camprovider", photoFile);
+                    takeProfilePicture.launch(photoURI);
+                } catch (Exception ex) {
+                    Toast.makeText(getApplication(), ex.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
             else if (options[item].equals("Galeri"))
@@ -198,26 +194,32 @@ public class ChangePin extends AppCompatActivity {
         return image;
     }
 
+    ActivityResultLauncher<Uri> takeProfilePicture = registerForActivityResult(
+            new ActivityResultContracts.TakePicture(),
+            new ActivityResultCallback<Boolean>() {
+                @Override
+                public void onActivityResult(Boolean result) {
+                    if(result){
+                        compresseddatafotoakun = Uri.fromFile(Compressor.getDefault(ChangePin.this).compressToFile(new File(takenPhotoPath)));
+                        datafotoakun = Uri.fromFile(new File(takenPhotoPath));
+                        fotoakun.setImageURI(datafotoakun);
+                        uploadFoto();
+                    }else{
+                        Toast.makeText(getApplication(), "Gagal mengambil gambar.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
     protected void onActivityResult(int requestCode, int resultCode, Intent imageReturnedIntent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent);
-        switch(requestCode) {
-            case 101:
-                if(resultCode == RESULT_OK){
-                    compresseddatafotoakun = Uri.fromFile(Compressor.getDefault(this).compressToFile(new File(takenPhotoPath)));
-                    datafotoakun = Uri.fromFile(new File(takenPhotoPath));
-                    fotoakun.setImageURI(datafotoakun);
-                    uploadFoto();
-                }
-                break;
-            case 111:
-                if(resultCode == RESULT_OK && imageReturnedIntent != null){
-                    Uri selectedImage = imageReturnedIntent.getData();
-                    datafotoakun = imageReturnedIntent.getData();
-                    compresseddatafotoakun = imageReturnedIntent.getData();
-                    fotoakun.setImageURI(selectedImage);
-                    uploadFoto();
-                }
-                break;
+        if (requestCode == 111) {
+            if (resultCode == RESULT_OK && imageReturnedIntent != null) {
+                Uri selectedImage = imageReturnedIntent.getData();
+                datafotoakun = imageReturnedIntent.getData();
+                compresseddatafotoakun = imageReturnedIntent.getData();
+                fotoakun.setImageURI(selectedImage);
+                uploadFoto();
+            }
         }
     }
 
