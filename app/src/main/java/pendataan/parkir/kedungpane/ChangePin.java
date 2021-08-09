@@ -60,7 +60,6 @@ public class ChangePin extends AppCompatActivity {
     private StorageReference folderstorage;
     private static final int STORAGE_PERMISSION_CODE = 1010;
     private static final int CAMERA_PERMISSION_CODE = 1011;
-    private static final int TAKE_CAMERA_FOTO_AKUN = 101;
     private static final int LOAD_FROM_GALLERY_FOTO_AKUN = 111;
 
     @Override
@@ -135,7 +134,7 @@ public class ChangePin extends AppCompatActivity {
 
     private void setUpSpinnerRegu() {
         List<String> list = new ArrayList<>();
-        list.add("REGU 1");list.add("REGU 2");list.add("REGU 3");list.add("REGU 4");
+        list.add("REGU 1");list.add("REGU 2");list.add("REGU 3");list.add("REGU 4");list.add("PIKET KONTROL");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, list);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
