@@ -75,7 +75,7 @@ public class ThisAppFirebaseMessagingService extends FirebaseMessagingService {
                 notificationManager.createNotificationChannel(channel);
             }
             notificationManager.notify(id,notificationBuilder.build());
-        }else if(messagetype.equals("lapsus")&&Objects.equals(sendTo, iduser)){
+        }else if(messagetype.equals("balasanlapsus")&&Objects.requireNonNull(sendTo).equals(iduser)){
             intent = new Intent(this, MainActivity3.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 10, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             notificationBuilder.setFullScreenIntent(pendingIntent,true);
