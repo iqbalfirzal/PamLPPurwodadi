@@ -7,9 +7,67 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1059329338160:android:04941a88e1a83b1f6e76f5",
+        "android_client_info": {
+          "package_name": "lpkedungpane.app.monitoringe_wasrik"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcPrbontU9KzN_yDMNXv-NXEGKQEoS2sE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1059329338160:android:fac0f0d2a0f0d0bf6e76f5",
         "android_client_info": {
           "package_name": "lpkedungpane.publicservices.user"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcPrbontU9KzN_yDMNXv-NXEGKQEoS2sE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059329338160:android:82753ac28355968f6e76f5",
+        "android_client_info": {
+          "package_name": "pendataan.pam.kedungpane"
         }
       },
       "oauth_client": [

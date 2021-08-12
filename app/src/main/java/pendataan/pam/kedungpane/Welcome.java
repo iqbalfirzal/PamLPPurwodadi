@@ -163,8 +163,8 @@ public class Welcome extends AppCompatActivity {
 
             json.put("to","/topics/"+"umjoL1srorNjDvpmeocBJ1kN7pVTb4t9zgmsPCHIs");
             JSONObject notificationObj = new JSONObject();
-            notificationObj.put("title", "Laporan Masuk !");
-            notificationObj.put("body", "PERINGATAM KEADAAN DARURAT OLEH "+nama.toUpperCase());
+            notificationObj.put("title", "Laporan Masuk");
+            notificationObj.put("body", "PERINGATAN KEADAAN DARURAT OLEH "+nama.toUpperCase());
             notificationObj.put("click_action", "BUKA_ACTIVITY_EMERGENCY");
 
             JSONObject extraData = new JSONObject();
