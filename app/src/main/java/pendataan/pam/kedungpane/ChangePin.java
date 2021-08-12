@@ -224,7 +224,7 @@ public class ChangePin extends AppCompatActivity {
 
     private void uploadFoto(){
         progressDialog.show();
-        final StorageReference lokasifotoktp = folderstorage.child("fotowasrik").child("profil").child("FP_NIP_"+new PrefManager(this).getNip());
+        final StorageReference lokasifotoktp = folderstorage.child("fotopengamanan").child("profil").child("FP_NIP_"+new PrefManager(this).getNip());
         lokasifotoktp.putFile(compresseddatafotoakun).addOnSuccessListener(taskSnapshot -> lokasifotoktp.getDownloadUrl().addOnSuccessListener(this::deleteTempFiles)).addOnFailureListener(e -> {
             progressDialog.dismiss();
             Toast.makeText(ChangePin.this,"Gagal mengunggah! Periksa koneksi.",Toast.LENGTH_LONG).show();

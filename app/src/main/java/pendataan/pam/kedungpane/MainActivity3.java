@@ -250,7 +250,7 @@ public class MainActivity3 extends AppCompatActivity {
     }
 
     private void uploadFoto(){
-        final StorageReference lokasifoto = folderstorage.child("fotowasrik").child("lapsus").child(namapelapor.getText().toString()+"_"+datafotolaporan.getLastPathSegment());
+        final StorageReference lokasifoto = folderstorage.child("fotopengamanan").child("lapsus").child(namapelapor.getText().toString()+"_"+datafotolaporan.getLastPathSegment());
         lokasifoto.putFile(compresseddatafotolaporan).continueWithTask(task -> {
             if (!task.isSuccessful()){
                 throw Objects.requireNonNull(task.getException());

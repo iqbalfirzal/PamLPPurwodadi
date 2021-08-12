@@ -265,13 +265,13 @@ public class MainActivity2 extends AppCompatActivity {
         progressDialog = new ProgressDialog(MainActivity2.this);
         progressDialog.isIndeterminate();
         progressDialog.setMessage("Sedang mengunggah data...");
-        progressDialog.setTitle("Laporan Kontrol Wasrik");
+        progressDialog.setTitle("Laporan Kontrol Pengamanan");
         progressDialog.setCancelable(false);
         progressDialog.show();
         if(datafotopetugas==null){
             exeKirimData(namacekpoin, "",lat,longi);
         }else{
-            final StorageReference lokasifoto = folderstorage.child("fotowasrik").child("control").child(namapetugas.getText().toString()+"_"+datafotopetugas.getLastPathSegment());
+            final StorageReference lokasifoto = folderstorage.child("fotopengamanan").child("control").child(namapetugas.getText().toString()+"_"+datafotopetugas.getLastPathSegment());
             lokasifoto.putFile(compresseddatafotopetugas).continueWithTask(task -> {
                 if (!task.isSuccessful()){
                     throw Objects.requireNonNull(task.getException());
@@ -306,7 +306,7 @@ public class MainActivity2 extends AppCompatActivity {
         docData.put("regu", String.valueOf(regu.getText()));
         docData.put("geo", new GeoPoint(lat,longi));
         docData.put("keterangan", String.valueOf(keterangan.getText()));
-        db.collection("kontrolwasrik")
+        db.collection("kontrolpengamanan")
                 .document().set(docData)
                 .addOnSuccessListener(aVoid -> {
                     namapetugas.setText("");takenPhotoPath = null;datafotopetugas = null;progressDialog.dismiss();
