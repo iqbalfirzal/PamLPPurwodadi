@@ -1,4 +1,4 @@
-package pendataan.parkir.kedungpane;
+package pendataan.pam.kedungpane;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -76,7 +76,6 @@ public class Welcome extends AppCompatActivity {
         TextView petugasnya = findViewById(R.id.petugasnya);
         petugasnya.setText(new PrefManager(this).getNama()+"\n"+new PrefManager(this).getRegu());
         Button emergencycall = findViewById(R.id.btn_emergencycall);
-        Button etraffic = findViewById(R.id.btn_etraffic);
         Button econtrol = findViewById(R.id.btn_econtrol);
         Button elapsus = findViewById(R.id.btn_elapsus);
         Button gantipin = findViewById(R.id.btn_gantipin);
@@ -90,10 +89,6 @@ public class Welcome extends AppCompatActivity {
                 checkPermission(Manifest.permission.ACCESS_COARSE_LOCATION, REQUEST_COARSE_LOCATION_CODE);
                 confirmEmergency();
             }
-        });
-        etraffic.setOnClickListener(v -> {
-            Intent intent = new Intent(Welcome.this, MainActivity.class);
-            startActivity(intent);
         });
         econtrol.setOnClickListener(v -> {
             Intent intent = new Intent(Welcome.this, MainActivity2.class);

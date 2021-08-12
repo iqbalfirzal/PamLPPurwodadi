@@ -1,4 +1,4 @@
-package pendataan.parkir.kedungpane;
+package pendataan.pam.kedungpane;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;

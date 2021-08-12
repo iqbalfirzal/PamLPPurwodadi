@@ -1,4 +1,4 @@
-package pendataan.parkir.kedungpane;
+package pendataan.pam.kedungpane;
 
 import android.Manifest;
 import android.annotation.SuppressLint;

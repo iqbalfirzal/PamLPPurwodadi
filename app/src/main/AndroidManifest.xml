@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="pendataan.parkir.kedungpane">
+    package="pendataan.pam.kedungpane">
 
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
 
@@ -25,20 +25,17 @@
         android:roundIcon="@drawable/ic_shield"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkirLPKedungpane">
-        <activity android:name=".ShowEmergencyCall">
+        <activity android:name="pendataan.pam.kedungpane.ShowEmergencyCall">
             <intent-filter>
                 <action android:name="BUKA_ACTIVITY_EMERGENCY"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
-            android:name=".ChangePin"
+            android:name="pendataan.pam.kedungpane.ChangePin"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".HistoryParkir"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".Login"
+            android:name="pendataan.pam.kedungpane.Login"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -47,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity3"
+            android:name="pendataan.pam.kedungpane.MainActivity3"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="BUKA_ACTIVITY_LAPSUS"/>
@@ -55,16 +52,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity2"
+            android:name="pendataan.pam.kedungpane.MainActivity2"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".Welcome" />
-        <activity
-            android:name=".OutParkir"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".AddParkir"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".MainActivity" />
+        <activity android:name="pendataan.pam.kedungpane.Welcome" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -77,7 +67,7 @@
         </provider>
 
         <service
-            android:name=".ThisAppFirebaseMessagingService"
+            android:name="pendataan.pam.kedungpane.ThisAppFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -1,4 +1,4 @@
-package pendataan.parkir.kedungpane;
+package pendataan.pam.kedungpane;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
