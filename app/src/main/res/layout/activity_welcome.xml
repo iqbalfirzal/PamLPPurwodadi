@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:layout_weight="4"
-                android:text="E - Wasrik  \nLP Kedungpane   "
+                android:text="E - Pengamanan  \nLP Kedungpane   "
                 android:theme="@style/TitleTextStyle" />
 
             <ImageButton
