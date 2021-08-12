@@ -19,7 +19,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "pendataan.parkir.kedungpane"
+        applicationId "pendataan.pam.kedungpane"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
