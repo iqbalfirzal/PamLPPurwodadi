@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
@@ -63,7 +64,8 @@ public class MainActivity2 extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 1011;
     private static final int REQUEST_FINE_LOCATION_CODE = 1111;
     private static final int REQUEST_COARSE_LOCATION_CODE = 1101;
-    LocationManager locationManager;
+    private LocationManager locationManager;
+    private double currentlat=0; private double currentlongi=0;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -103,7 +105,18 @@ public class MainActivity2 extends AppCompatActivity {
                 if (TextUtils.isEmpty(namapetugas.getText().toString()) | TextUtils.isEmpty(keterangan.getText().toString()) | TextUtils.isEmpty(regu.getText().toString())) {
                     Toast.makeText(getApplication(), "Masih ada kolom yang kosong.", Toast.LENGTH_SHORT).show();
                 } else {
-                    exeScan();
+                    if (ActivityCompat.checkSelfPermission(
+                            MainActivity2.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            MainActivity2.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION_CODE);
+                    } else {
+                        FusedLocationProviderClient gettingFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+                        gettingFusedLocation.getLastLocation().addOnSuccessListener(location -> {
+                            currentlat = location.getLatitude();
+                            currentlongi = location.getLongitude();
+                            (new Handler()).postDelayed(this::exeScan, 1000);
+                        }).addOnFailureListener(e -> showDialogGagalGPS());
+                    }
                 }
             }
         });
@@ -126,7 +139,7 @@ public class MainActivity2 extends AppCompatActivity {
         builder.setMessage("Nyalakan dulu GPS nya").setCancelable(false)
                 .setPositiveButton("Oke", (dialog, which) -> startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)))
                 .setNegativeButton("Tidak", (dialog, which) -> { dialog.cancel(); finish();
-        });
+                });
         final AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
@@ -186,53 +199,38 @@ public class MainActivity2 extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-            IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-            if (intentResult != null) {
-                if (intentResult.getContents() == null) {
-                    Toast.makeText(getBaseContext(), "Dibatalkan, silahkan coba lagi.", Toast.LENGTH_SHORT).show();
-                } else {
-                    try {
-                        JSONObject obj = new JSONObject(intentResult.getContents());
-                        String namalp = (obj.getString("namalp"));
-                        String namacekpoin = (obj.getString("namacekpoin"));
-                        dapatkanLokasidanData(namalp,namacekpoin);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        Toast.makeText(this, intentResult.getContents(), Toast.LENGTH_LONG).show();
-                    }
-                }
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (intentResult != null) {
+            if (intentResult.getContents() == null) {
+                Toast.makeText(getBaseContext(), "Dibatalkan, silahkan coba lagi.", Toast.LENGTH_SHORT).show();
             } else {
-                super.onActivityResult(requestCode, resultCode, data);
+                try {
+                    JSONObject obj = new JSONObject(intentResult.getContents());
+                    String namalp = (obj.getString("namalp"));
+                    String namacekpoin = (obj.getString("namacekpoin"));
+                    dapatkanDataLokasi(namalp,namacekpoin);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(this, intentResult.getContents(), Toast.LENGTH_LONG).show();
+                }
             }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
-    private void dapatkanLokasidanData(String namalp, String namacekpoin){
+    private void dapatkanDataLokasi(String namalp, String namacekpoin){
         if(namalp.equals("kedungpane")){
-            if (ActivityCompat.checkSelfPermission(
-                    MainActivity2.this,Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    MainActivity2.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION_CODE);
-            } else {
-                FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
-                mFusedLocation.getLastLocation().addOnSuccessListener(this, location -> {
-                    if (location != null){
-                        double lat = location.getLatitude();
-                        double longi = location.getLongitude();
-                        DocumentReference lokasigeopos = db.collection("titiklokasipos").document(namacekpoin);
-                        lokasigeopos.get().addOnSuccessListener(ds -> {
-                            double lat2 = Objects.requireNonNull(ds.getGeoPoint("geo")).getLatitude();
-                            double longi2 = Objects.requireNonNull(ds.getGeoPoint("geo")).getLongitude();
-                            if(selisihJarak(lat,longi,lat2,longi2) < 0.00699){
-                                confirmKirimData(namacekpoin,lat,longi);
-                            }else{
-                                Toast.makeText(MainActivity2.this,"LAPORAN GAGAL. Anda tidak berada di titik pos kontrol : "+namacekpoin,Toast.LENGTH_LONG).show();
-                            }
-                        }).addOnFailureListener(e -> Toast.makeText(MainActivity2.this, "Gagal membaca data lokasi. Mohon periksa koneksi.", Toast.LENGTH_LONG).show());
-                    }else {
-                        showDialogGagalGPS();
-                    }
-                });
-            }
+            DocumentReference lokasigeopos = db.collection("titiklokasipos").document(namacekpoin);
+            lokasigeopos.get().addOnSuccessListener(ds -> {
+                double lat = Objects.requireNonNull(ds.getGeoPoint("geo")).getLatitude();
+                double longi = Objects.requireNonNull(ds.getGeoPoint("geo")).getLongitude();
+                if(selisihJarak(currentlat,currentlongi,lat,longi) < 0.00699){
+                    confirmKirimData(namacekpoin,currentlat,currentlongi);
+                }else{
+                    Toast.makeText(MainActivity2.this,"LAPORAN GAGAL. Anda tidak berada di titik pos kontrol : "+namacekpoin,Toast.LENGTH_LONG).show();
+                }
+            }).addOnFailureListener(e -> Toast.makeText(MainActivity2.this, "Gagal membaca data lokasi. Mohon periksa koneksi.", Toast.LENGTH_LONG).show());
         }else{
             Toast.makeText(MainActivity2.this,"Scan QR Code yang telah ditentukan.",Toast.LENGTH_LONG).show();
         }
@@ -257,7 +255,7 @@ public class MainActivity2 extends AppCompatActivity {
                 +"\nRegu : "+regu.getText().toString()+"\nPos Kontrol : "+namacekpoin+"\nKeterangan : "+keterangan.getText().toString()+"\nTitik Koordinat Kontrol : "+ new GeoPoint(lat, longi));
         builder.setCancelable(false);
         builder.setPositiveButton("Kirim", (dialog, which) -> kirimData(namacekpoin,lat,longi));
-        builder.setNegativeButton("Batal", (dialog, which) -> dialog.dismiss());
+        builder.setNegativeButton("Batal", (dialog, which) -> {dialog.dismiss(); currentlat=0;currentlongi=0;});
         builder.show();
     }
 
@@ -309,7 +307,7 @@ public class MainActivity2 extends AppCompatActivity {
         db.collection("kontrolpengamanan")
                 .document().set(docData)
                 .addOnSuccessListener(aVoid -> {
-                    namapetugas.setText("");takenPhotoPath = null;datafotopetugas = null;progressDialog.dismiss();
+                    currentlat = 0;currentlongi = 0;takenPhotoPath = null;datafotopetugas = null;progressDialog.dismiss();
                     Toast.makeText(MainActivity2.this,"Laporan terkirim.",Toast.LENGTH_LONG).show();finish();
                 }).addOnFailureListener(e -> Toast.makeText(MainActivity2.this,"Gagal menambahkan data! Periksa koneksi.",Toast.LENGTH_LONG).show());
     }
