@@ -24,6 +24,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -66,6 +67,7 @@ public class MainActivity2 extends AppCompatActivity {
     private static final int REQUEST_COARSE_LOCATION_CODE = 1101;
     private LocationManager locationManager;
     private double currentlat=0; private double currentlongi=0;
+    private LocationResolver mLocationResolver;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -82,6 +84,7 @@ public class MainActivity2 extends AppCompatActivity {
         ImageView fotoilustrasi = findViewById(R.id.fotoilustrasi);
         ImageView back = findViewById(R.id.btn_back_control);
         fotopetugas = findViewById(R.id.fotopetugas);
+        mLocationResolver = new LocationResolver(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         LinearLayout laytambahfoto = findViewById(R.id.layfotopetugas);
         tambahfoto.setOnClickListener(v -> {
@@ -110,12 +113,15 @@ public class MainActivity2 extends AppCompatActivity {
                             MainActivity2.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION_CODE);
                     } else {
-                        FusedLocationProviderClient gettingFusedLocation = LocationServices.getFusedLocationProviderClient(this);
-                        gettingFusedLocation.getLastLocation().addOnSuccessListener(location -> {
-                            currentlat = location.getLatitude();
-                            currentlongi = location.getLongitude();
-                            (new Handler()).postDelayed(this::exeScan, 1000);
-                        }).addOnFailureListener(e -> showDialogGagalGPS());
+                        mLocationResolver.resolveLocation(this, location -> {
+                            if (location != null){
+                                currentlat = location.getLatitude();
+                                currentlongi = location.getLongitude();
+                                new Handler().postDelayed(this::exeScan, 1000 );
+                            }else {
+                                showDialogGagalGPS();
+                            }
+                        });
                     }
                 }
             }
@@ -225,7 +231,7 @@ public class MainActivity2 extends AppCompatActivity {
             lokasigeopos.get().addOnSuccessListener(ds -> {
                 double lat = Objects.requireNonNull(ds.getGeoPoint("geo")).getLatitude();
                 double longi = Objects.requireNonNull(ds.getGeoPoint("geo")).getLongitude();
-                if(selisihJarak(currentlat,currentlongi,lat,longi) < 0.00699){
+                if(selisihJarak(currentlat,currentlongi,lat,longi) < 0.01){
                     confirmKirimData(namacekpoin,currentlat,currentlongi);
                 }else{
                     Toast.makeText(MainActivity2.this,"LAPORAN GAGAL. Anda tidak berada di titik pos kontrol : "+namacekpoin,Toast.LENGTH_LONG).show();
@@ -319,6 +325,30 @@ public class MainActivity2 extends AppCompatActivity {
         builder.setCancelable(true);
         builder.setPositiveButton("Oke", (dialog, which) -> dialog.dismiss());
         builder.show();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mLocationResolver.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mLocationResolver.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocationResolver.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mLocationResolver.onRequestPermissionsResult(requestCode, grantResults);
     }
 
 }

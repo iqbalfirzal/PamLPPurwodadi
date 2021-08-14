@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -46,7 +47,8 @@ public class Welcome extends AppCompatActivity {
     private final String SENDNOTIFURL = "https://fcm.googleapis.com/fcm/send";
     private static final int REQUEST_FINE_LOCATION_CODE = 1111;
     private static final int REQUEST_COARSE_LOCATION_CODE = 1101;
-    LocationManager locationManager;
+    private LocationManager locationManager;
+    private LocationResolver mLocationResolver;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -71,6 +73,7 @@ public class Welcome extends AppCompatActivity {
             }
         }).addOnFailureListener(e -> Toast.makeText(Welcome.this, "Gagal memuat instruksi pimpinan. Periksa koneksi Anda.", Toast.LENGTH_LONG).show());
         mRequestQue = Volley.newRequestQueue(this);
+        mLocationResolver = new LocationResolver(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         ImageButton btnlogout = findViewById(R.id.btn_logout);
         TextView petugasnya = findViewById(R.id.petugasnya);
@@ -134,8 +137,7 @@ public class Welcome extends AppCompatActivity {
                 Welcome.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION_CODE);
         } else {
-            FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
-            mFusedLocation.getLastLocation().addOnSuccessListener(this, location -> {
+            mLocationResolver.resolveLocation(this, location -> {
                 if (location != null){
                     double lat = location.getLatitude();
                     double longi = location.getLongitude();
@@ -248,6 +250,30 @@ public class Welcome extends AppCompatActivity {
 
     private void clearLoginData(){
         new PrefManager(Welcome.this.getApplicationContext()).clearData();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mLocationResolver.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mLocationResolver.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocationResolver.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mLocationResolver.onRequestPermissionsResult(requestCode, grantResults);
     }
 
     @Override

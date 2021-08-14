@@ -27,6 +27,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -83,7 +84,8 @@ public class MainActivity3 extends AppCompatActivity {
     private static final int CAMERA_PERMISSION_CODE = 1011;
     private static final int REQUEST_FINE_LOCATION_CODE = 1111;
     private static final int REQUEST_COARSE_LOCATION_CODE = 1101;
-    LocationManager locationManager;
+    private LocationManager locationManager;
+    private LocationResolver mLocationResolver;
     private GeoPoint lokasilaporankhusus;
     private ListLapsusAdapter adapter;
     private RecyclerView recyclerView;
@@ -94,6 +96,7 @@ public class MainActivity3 extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main3);
         folderstorage = FirebaseStorage.getInstance().getReference();
+        mLocationResolver = new LocationResolver(this);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         mRequestQue = Volley.newRequestQueue(this);
         LinearLayout form = findViewById(R.id.laporannya);
@@ -183,8 +186,7 @@ public class MainActivity3 extends AppCompatActivity {
                 MainActivity3.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_FINE_LOCATION_CODE);
         } else {
-            FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
-            mFusedLocation.getLastLocation().addOnSuccessListener(this, location -> {
+            mLocationResolver.resolveLocation(this, location -> {
                 if (location != null){
                     double lat = location.getLatitude();double longi = location.getLongitude();
                     lokasilaporankhusus = new GeoPoint(lat,longi);
@@ -207,7 +209,6 @@ public class MainActivity3 extends AppCompatActivity {
                     });
                     builder.setNegativeButton("Batal", (dialog, which) -> dialog.dismiss());
                     builder.show();
-
                 }else {
                     Toast.makeText(MainActivity3.this, "Tidak dapat menemukan lokasi, coba lagi.", Toast.LENGTH_SHORT).show();
                 }
@@ -375,6 +376,7 @@ public class MainActivity3 extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         adapter.startListening();
+        mLocationResolver.onStart();
     }
 
     @Override
@@ -387,6 +389,19 @@ public class MainActivity3 extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         adapter.stopListening();
+        mLocationResolver.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLocationResolver.onDestroy();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        mLocationResolver.onRequestPermissionsResult(requestCode, grantResults);
     }
 
 }
