@@ -20,6 +20,7 @@
 
     <application
         android:allowBackup="true"
+        tools:replace="icon"
         android:icon="@drawable/ic_shield"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_shield"
