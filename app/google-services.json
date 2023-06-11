@@ -1,120 +1,33 @@
 {
   "project_info": {
-    "project_number": "1059329338160",
-    "project_id": "kedungpane-public-services",
-    "storage_bucket": "kedungpane-public-services.appspot.com"
+    "project_number": "261014448623",
+    "project_id": "pengamanan-lapas-ambarawa",
+    "storage_bucket": "pengamanan-lapas-ambarawa.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1059329338160:android:04941a88e1a83b1f6e76f5",
+        "mobilesdk_app_id": "1:261014448623:android:da1ac92472e98b5d516e1a",
         "android_client_info": {
-          "package_name": "lpkedungpane.app.monitoringe_wasrik"
+          "package_name": "pendataan.pam.ambarawa"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
+          "client_id": "261014448623-0qs7kcoqbmo255pctn7fcv37ju9v4hg7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDcPrbontU9KzN_yDMNXv-NXEGKQEoS2sE"
+          "current_key": "AIzaSyC8EcTQfVIDpneLErabXOtQUcdvX2QXBPw"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1059329338160:android:fac0f0d2a0f0d0bf6e76f5",
-        "android_client_info": {
-          "package_name": "lpkedungpane.publicservices.user"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDcPrbontU9KzN_yDMNXv-NXEGKQEoS2sE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1059329338160:android:82753ac28355968f6e76f5",
-        "android_client_info": {
-          "package_name": "pendataan.pam.kedungpane"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDcPrbontU9KzN_yDMNXv-NXEGKQEoS2sE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:1059329338160:android:6268e13799a45ccc6e76f5",
-        "android_client_info": {
-          "package_name": "pendataan.parkir.kedungpane"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDcPrbontU9KzN_yDMNXv-NXEGKQEoS2sE"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "1059329338160-8dr60i777f7b5keu7887ls3ohanuosd8.apps.googleusercontent.com",
+              "client_id": "261014448623-0qs7kcoqbmo255pctn7fcv37ju9v4hg7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

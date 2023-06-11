@@ -1,4 +1,4 @@
-package pendataan.pam.kedungpane;
+package pendataan.pam.ambarawa;
 
 import android.content.Context;
 import android.content.SharedPreferences;

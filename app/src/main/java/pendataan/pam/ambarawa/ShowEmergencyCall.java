@@ -1,4 +1,4 @@
-package pendataan.pam.kedungpane;
+package pendataan.pam.ambarawa;
 
 import android.content.Intent;
 import android.net.Uri;

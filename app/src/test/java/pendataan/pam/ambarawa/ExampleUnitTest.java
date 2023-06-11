@@ -1,4 +1,4 @@
-package pendataan.pam.kedungpane;
+package pendataan.pam.ambarawa;
 
 import org.junit.Test;
 

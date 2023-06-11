@@ -1,4 +1,4 @@
-package pendataan.pam.kedungpane;
+package pendataan.pam.ambarawa;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -26,8 +26,6 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;

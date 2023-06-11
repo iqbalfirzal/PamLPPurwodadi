@@ -1,4 +1,4 @@
-package pendataan.pam.kedungpane;
+package pendataan.pam.ambarawa;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -31,9 +31,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.storage.FirebaseStorage;
@@ -226,32 +223,11 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void dapatkanDataLokasi(String namalp, String namacekpoin){
-        if(namalp.equals("kedungpane")){
-            DocumentReference lokasigeopos = db.collection("titiklokasipos").document(namacekpoin);
-            lokasigeopos.get().addOnSuccessListener(ds -> {
-                double lat = Objects.requireNonNull(ds.getGeoPoint("geo")).getLatitude();
-                double longi = Objects.requireNonNull(ds.getGeoPoint("geo")).getLongitude();
-                if(selisihJarak(currentlat,currentlongi,lat,longi) < 0.01){
-                    confirmKirimData(namacekpoin,currentlat,currentlongi);
-                }else{
-                    Toast.makeText(MainActivity2.this,"LAPORAN GAGAL. Anda tidak berada di titik pos kontrol : "+namacekpoin,Toast.LENGTH_LONG).show();
-                }
-            }).addOnFailureListener(e -> Toast.makeText(MainActivity2.this, "Gagal membaca data lokasi. Mohon periksa koneksi.", Toast.LENGTH_LONG).show());
+        if(namalp.equals("ambarawa")){
+            confirmKirimData(namacekpoin,currentlat,currentlongi);
         }else{
             Toast.makeText(MainActivity2.this,"Scan QR Code yang telah ditentukan.",Toast.LENGTH_LONG).show();
         }
-    }
-
-    private double selisihJarak(double lat1, double lng1, double lat2, double lng2) {
-        double earthRadius = 3958.75;
-        double dLat = Math.toRadians(lat2-lat1);
-        double dLng = Math.toRadians(lng2-lng1);
-        double sindLat = Math.sin(dLat / 2);
-        double sindLng = Math.sin(dLng / 2);
-        double a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
-                * Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2));
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return earthRadius * c;
     }
 
     private void confirmKirimData(String namacekpoin, double lat, double longi){

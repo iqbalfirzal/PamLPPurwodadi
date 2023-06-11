@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="pendataan.pam.kedungpane">
+    package="pendataan.pam.ambarawa">
 
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
 
@@ -26,17 +26,17 @@
         android:roundIcon="@drawable/ic_shield"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkirLPKedungpane">
-        <activity android:name="pendataan.pam.kedungpane.ShowEmergencyCall">
+        <activity android:name="pendataan.pam.ambarawa.ShowEmergencyCall">
             <intent-filter>
                 <action android:name="BUKA_ACTIVITY_EMERGENCY"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
-            android:name="pendataan.pam.kedungpane.ChangePin"
+            android:name="pendataan.pam.ambarawa.ChangePin"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="pendataan.pam.kedungpane.Login"
+            android:name="pendataan.pam.ambarawa.Login"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pendataan.pam.kedungpane.MainActivity3"
+            android:name="pendataan.pam.ambarawa.MainActivity3"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="BUKA_ACTIVITY_LAPSUS"/>
@@ -53,9 +53,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pendataan.pam.kedungpane.MainActivity2"
+            android:name="pendataan.pam.ambarawa.MainActivity2"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name="pendataan.pam.kedungpane.Welcome" />
+        <activity android:name="pendataan.pam.ambarawa.Welcome" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -68,7 +68,7 @@
         </provider>
 
         <service
-            android:name="pendataan.pam.kedungpane.ThisAppFirebaseMessagingService"
+            android:name="pendataan.pam.ambarawa.ThisAppFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

@@ -1,4 +1,4 @@
-package pendataan.pam.kedungpane;
+package pendataan.pam.ambarawa;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -115,7 +115,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void performLogin(final String nip, String nama, String pin, String regu, String foto) {
-        auth.signInWithEmailAndPassword("wasrik1@lpsmg.go.id","wasrik1").addOnCompleteListener(Login.this, task -> {
+        auth.signInWithEmailAndPassword("pengamanan1@lpambarawa.go.id","pengamanan1").addOnCompleteListener(Login.this, task -> {
             progressBar.setVisibility(View.GONE);
             if(!task.isSuccessful()){
                 Toast.makeText(Login.this,"Gagal login! Periksa koneksi.",Toast.LENGTH_LONG).show();

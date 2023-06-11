@@ -1,4 +1,4 @@
-package pendataan.pam.kedungpane;
+package pendataan.pam.ambarawa;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;
