@@ -223,7 +223,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void dapatkanDataLokasi(String namalp, String namacekpoin){
-        if(namalp.equals("ambarawa")){
+        if(namalp.equals("rtpwd")){
             confirmKirimData(namacekpoin,currentlat,currentlongi);
         }else{
             Toast.makeText(MainActivity2.this,"Scan QR Code yang telah ditentukan.",Toast.LENGTH_LONG).show();
