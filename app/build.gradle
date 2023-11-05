@@ -19,7 +19,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "pendataan.pam.ambarawa"
+        applicationId "pendataan.pengamanan.rtpwd"
         minSdkVersion 21
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 30

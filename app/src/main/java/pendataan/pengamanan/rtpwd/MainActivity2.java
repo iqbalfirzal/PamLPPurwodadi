@@ -1,4 +1,4 @@
-package pendataan.pam.ambarawa;
+package pendataan.pengamanan.rtpwd;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -89,7 +89,7 @@ public class MainActivity2 extends AppCompatActivity {
             if(fotoilustrasi.getVisibility()==View.VISIBLE){
                 fotoilustrasi.setVisibility(View.GONE);
                 laytambahfoto.setVisibility(View.VISIBLE);
-                tambahfoto.setText("OKE, MANTAP");
+                tambahfoto.setText("OKE");
             }else{
                 fotoilustrasi.setVisibility(View.VISIBLE);
                 laytambahfoto.setVisibility(View.GONE);
@@ -169,6 +169,14 @@ public class MainActivity2 extends AppCompatActivity {
         }
     }
 
+    private File createImageFile() throws IOException {
+        String randomName = GenerateRandomValue.getId(5);
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(randomName,".jpg", storageDir);
+        takenPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
     ActivityResultLauncher<Uri> takePictureControl = registerForActivityResult(
             new ActivityResultContracts.TakePicture(),
             new ActivityResultCallback<Boolean>() {
@@ -183,14 +191,6 @@ public class MainActivity2 extends AppCompatActivity {
                     }
                 }
             });
-
-    private File createImageFile() throws IOException {
-        String randomName = GenerateRandomValue.getId(5);
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(randomName,".jpg", storageDir);
-        takenPhotoPath = image.getAbsolutePath();
-        return image;
-    }
 
     private void exeScan(){
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);

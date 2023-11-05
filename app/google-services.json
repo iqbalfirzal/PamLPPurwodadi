@@ -1,33 +1,62 @@
 {
   "project_info": {
-    "project_number": "261014448623",
-    "project_id": "pengamanan-lapas-ambarawa",
-    "storage_bucket": "pengamanan-lapas-ambarawa.appspot.com"
+    "project_number": "1053479945373",
+    "project_id": "pengamanan-rutan-purwodadi",
+    "storage_bucket": "pengamanan-rutan-purwodadi.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:261014448623:android:da1ac92472e98b5d516e1a",
+        "mobilesdk_app_id": "1:1053479945373:android:fb17d85d8e8fc5badd0074",
         "android_client_info": {
-          "package_name": "pendataan.pam.ambarawa"
+          "package_name": "pendataan.pengamanan.rtpwd"
         }
       },
       "oauth_client": [
         {
-          "client_id": "261014448623-0qs7kcoqbmo255pctn7fcv37ju9v4hg7.apps.googleusercontent.com",
+          "client_id": "1053479945373-anc6akf70529cvct8n9q16802v6g5gse.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC8EcTQfVIDpneLErabXOtQUcdvX2QXBPw"
+          "current_key": "AIzaSyC-GbkpFCNfYVA8vkJtHML5zN4AOujzFvk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "261014448623-0qs7kcoqbmo255pctn7fcv37ju9v4hg7.apps.googleusercontent.com",
+              "client_id": "1053479945373-anc6akf70529cvct8n9q16802v6g5gse.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1053479945373:android:2ce109010c201c5ddd0074",
+        "android_client_info": {
+          "package_name": "rtpwd.app.monitoringe_pam"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1053479945373-anc6akf70529cvct8n9q16802v6g5gse.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-GbkpFCNfYVA8vkJtHML5zN4AOujzFvk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1053479945373-anc6akf70529cvct8n9q16802v6g5gse.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

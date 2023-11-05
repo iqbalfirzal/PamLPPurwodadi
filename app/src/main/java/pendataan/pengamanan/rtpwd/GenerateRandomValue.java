@@ -1,4 +1,4 @@
-package pendataan.pam.ambarawa;
+package pendataan.pengamanan.rtpwd;
 import java.util.Random;
 
 public class GenerateRandomValue {

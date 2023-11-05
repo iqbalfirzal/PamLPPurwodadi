@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="pendataan.pam.ambarawa">
+    package="pendataan.pengamanan.rtpwd">
 
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"/>
 
@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="ANDROID.PERMISSION.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -26,17 +26,17 @@
         android:roundIcon="@drawable/ic_shield"
         android:supportsRtl="true"
         android:theme="@style/Theme.ParkirLPKedungpane">
-        <activity android:name="pendataan.pam.ambarawa.ShowEmergencyCall">
+        <activity android:name="pendataan.pengamanan.rtpwd.ShowEmergencyCall">
             <intent-filter>
                 <action android:name="BUKA_ACTIVITY_EMERGENCY"/>
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity
-            android:name="pendataan.pam.ambarawa.ChangePin"
+            android:name="pendataan.pengamanan.rtpwd.ChangePin"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="pendataan.pam.ambarawa.Login"
+            android:name="pendataan.pengamanan.rtpwd.Login"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pendataan.pam.ambarawa.MainActivity3"
+            android:name="pendataan.pengamanan.rtpwd.MainActivity3"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="BUKA_ACTIVITY_LAPSUS"/>
@@ -53,9 +53,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="pendataan.pam.ambarawa.MainActivity2"
+            android:name="pendataan.pengamanan.rtpwd.MainActivity2"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name="pendataan.pam.ambarawa.Welcome" />
+        <activity android:name="pendataan.pengamanan.rtpwd.Welcome" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -68,7 +68,7 @@
         </provider>
 
         <service
-            android:name="pendataan.pam.ambarawa.ThisAppFirebaseMessagingService"
+            android:name="pendataan.pengamanan.rtpwd.ThisAppFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

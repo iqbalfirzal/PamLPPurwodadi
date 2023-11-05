@@ -1,4 +1,4 @@
-package pendataan.pam.ambarawa;
+package pendataan.pengamanan.rtpwd;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.GeoPoint;

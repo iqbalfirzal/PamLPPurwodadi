@@ -1,4 +1,4 @@
-package pendataan.pam.ambarawa;
+package pendataan.pengamanan.rtpwd;
 
 import android.content.Intent;
 import android.net.Uri;
