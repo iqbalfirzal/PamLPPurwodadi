@@ -230,7 +230,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:textSize="10dp"
-                android:text="Copyright 2023 / LP Ambarawa"/>
+                android:text="Copyright 2023 / LP Purwodadi"/>
 
         </LinearLayout>
 
