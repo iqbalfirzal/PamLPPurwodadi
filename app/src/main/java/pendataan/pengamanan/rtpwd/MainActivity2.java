@@ -49,6 +49,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -192,11 +193,15 @@ public class MainActivity2 extends AppCompatActivity {
                 @Override
                 public void onActivityResult(Boolean result) {
                     if(result){
+                        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy HH:mm");
                         try {
                             Bitmap bahaneditfoto = MediaStore.Images.Media.getBitmap(MainActivity2.this.getContentResolver(), Uri.fromFile(new File(takenPhotoPath)));
-                            Bitmap editeddatafoto = mark(bahaneditfoto, new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date()));
-                            datafotopetugas = convertBitmaptoUri(MainActivity2.this, editeddatafoto);
-                            fotopetugas.setImageURI(datafotopetugas);
+                            Bitmap editeddatafoto = mark(bahaneditfoto, sdf.format(new Date()));
+                            FileOutputStream fos = new FileOutputStream(takenPhotoPath);
+                            editeddatafoto.compress(Bitmap.CompressFormat.JPEG, 10, fos);
+                            fotopetugas.setImageBitmap(editeddatafoto);
+                            datafotopetugas = Uri.fromFile(new File(takenPhotoPath));
+                            fos.close();
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
@@ -217,15 +222,9 @@ public class MainActivity2 extends AppCompatActivity {
         Paint paint = new Paint();
         paint.setColor(Color.WHITE);
         paint.setTextSize(150);
+        paint.setShadowLayer(20, 0, 0, Color.GRAY);
         canvas.drawText(watermark, 300, 300, paint);
         return result;
-    }
-
-    private Uri convertBitmaptoUri(Context inContext, Bitmap inImage) {
-        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-        inImage.compress(Bitmap.CompressFormat.JPEG, 30, bytes);
-        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
-        return Uri.parse(path);
     }
 
     private void exeScan(){
