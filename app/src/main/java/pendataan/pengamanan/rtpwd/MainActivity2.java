@@ -7,11 +7,17 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.view.View;
@@ -41,10 +47,13 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 
@@ -56,7 +65,7 @@ public class MainActivity2 extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private EditText namapetugas, regu, keterangan;
     private ImageView fotopetugas;
-    private Uri datafotopetugas, compresseddatafotopetugas;
+    private Uri datafotopetugas;
     private String takenPhotoPath = null;
     private static final int STORAGE_PERMISSION_CODE = 1010;
     private static final int CAMERA_PERMISSION_CODE = 1011;
@@ -183,14 +192,41 @@ public class MainActivity2 extends AppCompatActivity {
                 @Override
                 public void onActivityResult(Boolean result) {
                     if(result){
-                        compresseddatafotopetugas = Uri.fromFile(Compressor.getDefault(getApplicationContext()).compressToFile(new File(takenPhotoPath)));
-                        datafotopetugas = Uri.fromFile(new File(takenPhotoPath));
-                        fotopetugas.setImageURI(datafotopetugas);
+                        try {
+                            Bitmap bahaneditfoto = MediaStore.Images.Media.getBitmap(MainActivity2.this.getContentResolver(), Uri.fromFile(new File(takenPhotoPath)));
+                            Bitmap editeddatafoto = mark(bahaneditfoto, new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(new Date()));
+                            datafotopetugas = convertBitmaptoUri(MainActivity2.this, editeddatafoto);
+                            fotopetugas.setImageURI(datafotopetugas);
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
                     }else{
                         Toast.makeText(getApplication(), "Gagal mengambil gambar.", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
+
+    private static Bitmap mark(Bitmap src, String watermark) {
+        int w = src.getWidth();
+        int h = src.getHeight();
+        Matrix matrix = new Matrix();
+        matrix.preRotate(90);
+        Bitmap result = Bitmap.createBitmap(src , 0, 0, w, h, matrix, true);
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(result, 0, 0, null);
+        Paint paint = new Paint();
+        paint.setColor(Color.WHITE);
+        paint.setTextSize(150);
+        canvas.drawText(watermark, 300, 300, paint);
+        return result;
+    }
+
+    private Uri convertBitmaptoUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 30, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
 
     private void exeScan(){
         IntentIntegrator intentIntegrator = new IntentIntegrator(this);
@@ -252,7 +288,7 @@ public class MainActivity2 extends AppCompatActivity {
             exeKirimData(namacekpoin, "",lat,longi);
         }else{
             final StorageReference lokasifoto = folderstorage.child("fotopengamanan").child("control").child(namapetugas.getText().toString()+"_"+datafotopetugas.getLastPathSegment());
-            lokasifoto.putFile(compresseddatafotopetugas).continueWithTask(task -> {
+            lokasifoto.putFile(datafotopetugas).continueWithTask(task -> {
                 if (!task.isSuccessful()){
                     throw Objects.requireNonNull(task.getException());
                 }
@@ -269,7 +305,7 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     private void deleteTempFiles(String cekpoin, String downurl, double lat, double longi) {
-        File delfoto = new File(datafotopetugas.getPath());
+        File delfoto = new File(Objects.requireNonNull(datafotopetugas.getPath()));
         if (delfoto.delete()) {
             exeKirimData(cekpoin, downurl,lat,longi);
         } else {
